@@ -71,6 +71,34 @@ function Invoke-Checked {
     }
 }
 
+function Assert-LabStopped {
+    param([string]$Lab)
+    $instruction = 'Stop your API and Vite servers with Ctrl+C before validation/export; restart both before browser checks. No process was terminated.'
+    if ($IsWindows) {
+        $processes = Get-CimInstance -ClassName Win32_Process `
+            -Filter "Name = 'dotnet.exe' OR Name = 'node.exe' OR Name = 'ReadingList.Api.exe'"
+        foreach ($process in $processes) {
+            if ($process.CommandLine -and
+                $process.CommandLine.IndexOf($Lab + '\', [StringComparison]::OrdinalIgnoreCase) -ge 0) {
+                throw $instruction
+            }
+        }
+    }
+
+    foreach ($name in @('ReadingList.Api.dll', 'ReadingList.Api.exe')) {
+        $file = Join-Path $Lab "api\bin\Debug\net10.0\$name"
+        if (Test-Path -LiteralPath $file -PathType Leaf) {
+            try {
+                $handle = [IO.File]::Open($file, [IO.FileMode]::Open,
+                    [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
+                $handle.Dispose()
+            } catch {
+                throw $instruction
+            }
+        }
+    }
+}
+
 function Assert-Feed {
     param([string]$Lab)
     $npm = Assert-SafePath (Join-Path $Lab '.npmrc')

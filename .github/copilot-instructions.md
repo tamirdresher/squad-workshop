@@ -10,6 +10,8 @@ The product upstream is `https://github.com/github/squad` and official docs are 
 
 Use Microsoft CFS feeds only on managed setups. The course baseline is stable Squad 1.1.0, rechecked on 2026-11-10; do not recommend floating `@latest`, previews or public-registry bypasses. `docs/ai-next/upstream-and-provenance.md` records source verification and delivery gates. CLI installation/authentication does not prove Copilot entitlement or a successful live run. Do not initialize a resident Squad in this course repository; learners initialize one only inside a new participant lab.
 
+Set `$env:SQUAD_NO_PERSONAL='1'` before participant init and in every participant-session terminal. Verify the resolved team root and loaded agent profile are lab-local; `--state-backend local` does not prevent personal-Squad linking, and matching user-level agents can override repo agents. Stop only owned API/Vite servers before validation/export and restart them afterward for browser checks.
+
 For 1.1.0, `squad triage` polls by default and `squad loop` runs a configured prompt file without requiring issues. Neither is run during the core class. Do not use the historical "Ralph only reads issues" claim below as current loop behavior, and do not recommend unverified stop-file recipes.
 
 The remaining instructions below describe the retained extended modules' historical baseline. Their durations sum to 195 minutes before breaks; old doctor counts, model names and upstream issues are not current-release guarantees. Never recommend blanket permissions or unattended loops for the new course.

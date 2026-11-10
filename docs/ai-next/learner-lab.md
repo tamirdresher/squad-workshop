@@ -102,6 +102,8 @@ Use three terminals:
 | C | Workshop repository root | Validation and evidence scripts |
 
 Use another participant-root terminal for Copilot while the API is running.
+In **every participant PowerShell terminal**, including fresh/recovery Copilot
+terminals, set `$env:SQUAD_NO_PERSONAL='1'` before launching Squad or Copilot.
 Every code block below identifies its working directory. Commands inside
 plain-text prompt blocks are instructions **to Squad**, not shell commands.
 
@@ -126,6 +128,21 @@ The development proxy forwards `/api` requests to `http://127.0.0.1:5080`.
 Use an instructor-approved alternative if the ports are occupied; changing the
 API port without updating the proxy will break UI/API connectivity.
 Do not terminate a process that is not yours.
+
+### Required stop → validate/export → restart cycle
+
+Before **every** `Test-AiNextLab.ps1` or `Export-AiNextEvidence.ps1` command,
+stop your API in Terminal A **and** Vite in Terminal B with `Ctrl+C`.
+The validator builds the API and runs `npm ci`; running servers can lock Windows
+binaries or dependencies. `dotnet run` without watch does not reload new builds.
+The validator refuses identifiable lab processes/locked API outputs and never
+kills them. That guard cannot prove every server is stopped (especially outside
+Windows); you remain responsible for stopping both owned terminals.
+
+After validation/export succeeds, restart **both** using the commands above
+(Terminal B is already in `frontend`, so run `npm run dev` there). Only then do
+browser checks/reload. Keep this cycle inside each lab's validation timebox.
+If you cannot identify a server as yours, ask the instructor; do not kill it.
 
 **Another participant-root PowerShell terminal:**
 
@@ -165,8 +182,17 @@ confirm where you are:
 
 ```powershell
 Get-Location
+$env:SQUAD_NO_PERSONAL='1'
 git init
 squad init --roles --no-workflows --state-backend local
+$config = Get-Content .\.squad\config.json -Raw | ConvertFrom-Json
+if ($config.teamRoot -or $config.stateLocation -eq 'external' -or $config.stateBackend -ne 'local') {
+    throw 'Stop: this lab redirects team/state outside the expected local setup.'
+}
+$teamRoot = (Resolve-Path .\.squad).Path
+$agentProfile = (Resolve-Path .\.github\agents\squad.agent.md).Path
+"Expected TEAM_ROOT: $teamRoot"
+"Expected agent profile: $agentProfile"
 squad cast
 squad doctor
 ```
@@ -174,7 +200,13 @@ squad doctor
 `git init` creates the participant's own local repository; the provisioning
 script does **not** initialize Git or Squad. No remote or commit is required.
 `--no-workflows` keeps this exercise from introducing GitHub workflow automation.
-`--state-backend local` selects the local state backend, not a cloud service.
+`--state-backend local` selects storage, **not personal-Squad isolation**.
+Without `SQUAD_NO_PERSONAL=1`, init can link an existing personal Squad through
+`config.teamRoot`. The environment variable must be set **before** init; it does
+not undo an earlier redirect. If this check fails, stop and use a new destination
+with instructor help; never delete or modify your personal Squad to fix the lab.
+For this no-redirect configuration, the resolved team root is the printed local
+`.squad` directory. Inspect the printed profile file before starting Copilot.
 `squad cast` displays the cast; do not assume scaffolding alone guarantees an
 already personalized team.
 
@@ -185,13 +217,27 @@ exact check counts from `1.1.0`.
 **2. Establish the cast and ownership — 10 minutes.**
 
 ```powershell
+$env:SQUAD_NO_PERSONAL='1'
 copilot --agent squad
 ```
+
+**Profile-origin gate:** matching user-level custom agents can override a
+repository agent with the same name. Inspect agent-discovery diagnostics or the
+agent selector's source information, where supported, and compare the selected
+profile's origin with the lab-local path printed above. Check for a same-name
+agent in your user-level agent configuration; do not remove global agents.
+Have the first session report its effective `TEAM_ROOT` and profile source,
+then verify them against the local config/file and discovery information.
+The name “Squad”, an AI claim, and `squad doctor` alone do not prove which
+profile was loaded. If your CLI cannot establish that origin, stop the live
+route and record **profile origin unverified**; use prepared/manual work.
 
 Paste this bounded prompt:
 
 ```text
 We are doing a local Reading List workshop, in this participant repository only.
+First report your effective TEAM_ROOT and selected agent-profile source.
+Stop if either is outside this lab or its origin cannot be verified.
 Inspect the existing starter; do not implement a feature yet.
 
 Use the existing roster, or finish initial casting if it is still needed.
@@ -214,13 +260,14 @@ If casting requires a choice, choose a small theme and confirm the resulting
 named roster. This is participant-team setup, not an instruction to replace
 the workshop's own agents.
 
-**3. Verify and inspect — 7 minutes.** Run the app using the commands above.
+**3. Verify and inspect — 7 minutes.** Stop your API and Vite if running.
 In **Terminal C, workshop root**:
 
 ```powershell
 .\scripts\Test-AiNextLab.ps1 -LabPath .\reading-list-squad-lab -Feature starter
 ```
 
+Restart both servers using the commands above and check the app in the browser.
 In the participant root, inspect the actual artifacts:
 
 ```powershell
@@ -289,7 +336,8 @@ separate dispatched work or overlapping specialist tasks; a narrative saying
 two authors need the same file, stop, nominate one owner, and pass the other
 author's proposed change to the integrator.
 
-**3. Validate — 8 minutes.** In **Terminal C, workshop root**:
+**3. Validate — 8 minutes.** Stop your owned API and Vite with `Ctrl+C`.
+In **Terminal C, workshop root**:
 
 ```powershell
 .\scripts\Test-AiNextLab.ps1 -LabPath .\reading-list-squad-lab -Feature read
@@ -297,7 +345,8 @@ author's proposed change to the integrator.
 
 Always select `-Feature read` after a live change to a starter. The default
 checkpoint selection could otherwise validate only the starter.
-Check the read toggle in the browser, then reload after restarting your API.
+Restart both API and Vite after validation. Check the read toggle in the browser,
+then restart your API again and reload to check persistent state.
 Record both automated and manual outcomes accurately.
 
 **4. Capture — 5 minutes.** Add the named author ownership, observed
@@ -352,8 +401,9 @@ decision belongs in the consolidated file. Preserve the relevant excerpt in
 your evidence.
 
 **2. Start a genuinely fresh session — 4 minutes.** Exit the current Copilot
-session normally. Start `copilot --agent squad` again from the **same
-participant root**. Do not resume the old conversation, paste its transcript,
+session normally. Set `$env:SQUAD_NO_PERSONAL='1'` in the session terminal,
+repeat Lab 1's local-root/profile-origin checks, then start `copilot --agent squad`
+again from the **same participant root**. Do not resume the old conversation, paste its transcript,
 or copy the decision into the new prompt. Use the same approved model if
 available; record a model change as a confounding factor.
 
@@ -388,13 +438,15 @@ A second, prompted retrieval may be useful, but it is a separate observation.
 Do not let the acceptance contract in your prompt masquerade as proof that
 the agent remembered the earlier decision.
 
-**4. Validate and compare — 7 minutes.** In **Terminal C, workshop root**:
+**4. Validate and compare — 7 minutes.** Stop your owned API and Vite.
+In **Terminal C, workshop root**:
 
 ```powershell
 .\scripts\Test-AiNextLab.ps1 -LabPath .\reading-list-squad-lab -Feature filter
 ```
 
-Use your recovery path if you switched. Exercise all three UI filters. In
+Use your recovery path if you switched. Restart both servers, then exercise all
+three UI filters. In
 `AI-NEXT-EVIDENCE.md`, complete this comparison:
 
 | Evidence field | Your actual observation |
@@ -433,7 +485,8 @@ Decide whether you would accept the change, without publishing anything.
 
 ### Steps
 
-**1. Freeze and gather — 6 minutes.** Stop implementation. In **Terminal C,
+**1. Freeze and gather — 6 minutes.** Stop implementation and your API/Vite
+servers. Leave both stopped through validation **and** export. In **Terminal C,
 workshop root**, run the strongest feature actually being submitted:
 
 ```powershell
@@ -446,6 +499,8 @@ and label filtering incomplete. Keep the recovery path if applicable.
 The export performs fresh validation. Inspect the generated lab-relative
 `.ai-next\test-receipt.json`, `.ai-next\evidence.json`, and
 `.ai-next\source.diff`.
+
+Restart both servers only after export if doing another browser review.
 
 In a participant-root terminal:
 

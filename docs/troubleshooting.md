@@ -1,5 +1,25 @@
 # Troubleshooting
 
+## Current AI NEXT: participant identity and running servers
+
+- Set `$env:SQUAD_NO_PERSONAL='1'` before init and in **every** participant
+  PowerShell/Copilot session, including fresh/recovery sessions.
+  `--state-backend local` selects storage, not identity isolation; init can
+  otherwise link a personal Squad through `config.teamRoot`.
+- Follow [Lab 1's root/profile checks](ai-next/learner-lab.md): verify no external
+  redirect and a lab-local resolved team root **and loaded agent profile**.
+  Same-name user-level custom agents can override repository agents. Do not
+  remove global agents; if source discovery cannot establish profile origin,
+  stop the live route and record the blocker. An agent's own claim is not proof.
+- Before validation/export, stop **your** API and Vite with `Ctrl+C`.
+  The validator rebuilds API binaries and reinstalls dependencies, which can
+  conflict with Windows locks. Its non-destructive guard is best effort, not a
+  substitute for stopping both terminals. Restart both afterward before browser
+  checks; `dotnet run` without watch does not reload rebuilt code.
+- If an earlier init already wrote a personal/external `teamRoot`, setting the
+  environment variable afterward does not undo it. Preserve that directory and
+  ask the instructor about a fresh lab; never delete the personal Squad.
+
 <!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
 
 > **Historical extended-module troubleshooting.** For the current class use [AI NEXT prerequisites](ai-next/prerequisites.md). The old fork issue numbers and doctor counts below are version-specific observations, not current-release guarantees. Historical issue numbers have not been mapped to the canonical [github/squad issue tracker](https://github.com/github/squad/issues). Do not use blanket approval or stop-file recipes as a current operational runbook.

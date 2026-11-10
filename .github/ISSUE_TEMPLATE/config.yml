@@ -1,9 +1,9 @@
 blank_issues_enabled: false
 # Modified for the AI NEXT course refresh on 2026-11-10.
 contact_links:
-  - name: Questions and discussion
-    url: https://github.com/tamirdresher/squad-workshop/issues/new/choose
-    about: Ask questions, share experiences, and discuss the workshop here.
+  - name: Course contribution guidance
+    url: https://github.com/tamirdresher/squad-workshop/blob/main/CONTRIBUTING.md
+    about: Read contribution guidance; course Issues are disabled. Ask the instructor for classroom help.
   - name: Squad CLI issues
     url: https://github.com/github/squad/issues
     about: Bugs in Squad itself (not this course) go to github/squad. The npm package remains @bradygaster/squad-cli.

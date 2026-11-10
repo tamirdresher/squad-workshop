@@ -16,6 +16,7 @@ reading-list-squad-lab-*/
 
 # Disposable, scoped course validation (not learner source).
 .course-validation/
+scripts/qa/__pycache__/
 
 # Squad runtime artifacts (Ralph) — these typically live in the lab repo
 # (already excluded above) but are listed here as a pattern for downstream users

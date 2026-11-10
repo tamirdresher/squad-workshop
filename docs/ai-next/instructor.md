@@ -65,6 +65,7 @@ result is implied. Re-run the gates below for the actual classroom environment.
 Current installed help supports:
 
 ```powershell
+$env:SQUAD_NO_PERSONAL='1'
 squad init --roles --no-workflows --state-backend local
 squad cast
 squad doctor
@@ -76,6 +77,21 @@ workshop checkout. `--roles` supports the role-based scaffold; initial
 personalization/casting may still need a prompt. Inspect the resulting roster.
 `squad cast` displays it. Doctor failures are real gate failures; a reachable
 Copilot executable is not proof of entitlement or model availability.
+
+Set `SQUAD_NO_PERSONAL=1` **before** init and in every participant-session terminal,
+including fresh/recovery sessions. Local storage does not prevent personal-Squad
+linking. Follow Lab 1's checks: no `teamRoot`/external redirect, resolved local
+`.squad`, and lab-local loaded `.github\agents\squad.agent.md`. Matching
+user-level agents can override same-name repository agents; a matching name or
+doctor success is not profile-origin proof. If source discovery cannot establish
+the loaded profile, keep the live route blocked and record that gap.
+
+Before every validation/export, stop only owned API and Vite servers with
+`Ctrl+C`. The scripts rebuild/reinstall and refuse identifiable running lab
+servers or locked outputs; they do not kill processes or detect every possible
+launch. Restart both after validation/export, before browser checks.
+`dotnet run` without watch does not reload rebuilt code. Rehearse this sequence
+on the classroom Windows machines; retain it inside existing validation slots.
 
 Record `squad --version` and actual help in rehearsal. If an npm inventory
 shows an old insider installation while the command reports another version,
@@ -310,15 +326,16 @@ topics fit into the four hands-on labs.
 
 ### Current autonomy facts: do not repeat legacy assumptions
 
-The installed **1.1.0** help receipt establishes the following distinctions.
+The installed **1.1.0** help and tagged-source receipts establish these distinctions.
 They are an instructor brief, **not instructions to start autonomy in class**:
 
 - `triage` polls GitHub Issues, with a default polling interval of **ten
   minutes**. Its help includes `--execute`, `--max-concurrent N`, and
   `--timeout N`. The documented interactive stop is **Ctrl+C**.
 - `loop` uses a prompt file whose default is **`loop.md`**; do not assume the
-  default is `.squad\loop.md`. Its configuration uses `configured: true`
-  frontmatter. It does **not** require GitHub Issues as its queue.
+  default is `.squad\loop.md`. `configured: true` frontmatter selects normal
+  flow; false/missing selects onboarding and **continues execution**. It is not
+  an execution or authorization gate. It does **not** require GitHub Issues as its queue.
 - Do not conflate an issue-triage queue with arbitrary prompt-driven recurring
   work. Neither is permission to infer authorization from a chat.
 - Do not teach an undocumented `ralph-stop` file as the stop contract for this

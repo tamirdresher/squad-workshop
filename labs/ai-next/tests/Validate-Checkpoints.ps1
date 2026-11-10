@@ -71,6 +71,27 @@ try {
         }
     }
 
+    Check 'locked API output refuses validation before rebuild and releases cleanly' {
+        $file = Join-Path $labs.starter 'api\bin\Debug\net10.0\ReadingList.Api.dll'
+        $handle = [IO.File]::Open($file, [IO.FileMode]::Open,
+            [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
+        try {
+            $refused = $false
+            try {
+                & $test -LabPath $labs.starter -Feature starter
+            } catch {
+                if ($_.Exception.Message -notlike '*Stop your API and Vite servers*') {
+                    throw
+                }
+                $refused = $true
+            }
+            if (!$refused) { throw 'Locked output was not refused.' }
+        } finally {
+            $handle.Dispose()
+        }
+        Assert-LabStopped $labs.starter
+    }
+
     Check 'existing destination rejected without modifying source' {
         $file = Join-Path $labs.starter 'api\Program.cs'
         $before = (Get-FileHash $file).Hash

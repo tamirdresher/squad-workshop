@@ -121,6 +121,7 @@ From the participant directory, start the ordinary CLI:
 
 ```powershell
 Set-Location .\reading-list-squad-lab
+$env:SQUAD_NO_PERSONAL='1'
 copilot
 ```
 
@@ -176,6 +177,15 @@ execution.
 - **`squad doctor` fails:** run it inside the participant repository, save the
   actual output, and fix failed required checks. Do not paste the old workshop's
   `0.9.4` counts as expected output for `1.1.0`.
+- **Personal Squad or wrong custom agent:** set `SQUAD_NO_PERSONAL=1` before
+  init and in every participant-session terminal. The local backend does not
+  isolate team identity. Follow [Lab 1's root/profile-origin checks](learner-lab.md);
+  matching user-level agents can override a same-name repository agent.
+  If the loaded lab-local profile cannot be verified, keep live work blocked.
+- **Locked files or stale UI after a feature:** stop only your API and Vite
+  before validation/export, then restart both before browser checks. The scripts
+  rebuild API binaries and reinstall frontend dependencies; `dotnet run`
+  without watch does not reload new builds.
 - **Squad versions disagree across tools:** run `Get-Command squad -All` and
   `squad --version` to identify the active command. An older installation in
   `npm list --global --depth=0` does not prove that the active executable is old.

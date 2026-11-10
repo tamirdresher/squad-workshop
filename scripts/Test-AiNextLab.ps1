@@ -23,6 +23,8 @@ foreach ($artifact in @('evidence.json', 'source.diff')) {
 }
 
 Assert-Feed $lab
+Assert-LabStopped $lab
+Write-Output 'Validating stopped lab servers. Restart your API and Vite after validation, before browser checks.'
 
 Push-Location $lab
 try {

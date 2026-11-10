@@ -3,8 +3,6 @@
 <!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Check links](https://github.com/tamirdresher/squad-workshop/actions/workflows/check-links.yml/badge.svg)](https://github.com/tamirdresher/squad-workshop/actions/workflows/check-links.yml)
-[![Verify script](https://github.com/tamirdresher/squad-workshop/actions/workflows/verify-script.yml/badge.svg)](https://github.com/tamirdresher/squad-workshop/actions/workflows/verify-script.yml)
 
 ## AI NEXT: the three-hour course
 
@@ -142,7 +140,7 @@ Then ask anything: "I'm on Module 1 Step 4 and the team isn't generating tests" 
 
 Spotted a broken step? Tool version changed? Want to propose a new module?
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) or [open an issue](https://github.com/tamirdresher/squad-workshop/issues/new/choose).
+See [CONTRIBUTING.md](CONTRIBUTING.md). Course Issues are disabled; ask the instructor for classroom help. Workflow files are retained locally, but no hosted workflow/badge availability is claimed before publication.
 
 ---
 

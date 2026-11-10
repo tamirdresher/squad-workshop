@@ -34,10 +34,10 @@ squad loop --help
 
 Relevant 1.1.0 contracts:
 
-- `init` supports `--roles`, `--no-workflows` and `--state-backend local|orphan|two-layer`. The course initializes a team only in a new participant repository, never in the course root.
+- `init` supports `--roles`, `--no-workflows` and `--state-backend local|orphan|two-layer`. That backend flag does not isolate team identity: [tagged init source](https://github.com/github/squad/blob/v1.1.0/packages/squad-cli/src/cli/core/init.ts#L342-L359) can set `config.teamRoot` to an existing personal Squad. Set `SQUAD_NO_PERSONAL=1` before init and all participant sessions, verify local config/root and the loaded lab-local agent profile, and never initialize in the course root.
 - `doctor` checks structure/configuration and reachable Copilot CLI; it is not proof of subscription entitlement or a successful model request.
 - `triage` polls by default (10 minutes), documents Ctrl+C to stop, and adds execution with `--execute`. Execution supports `--max-concurrent` and per-issue `--timeout`.
-- `loop` uses a prompt file (`loop.md` by default), requires intentional `configured: true` frontmatter, and does not require an issue queue. Historical descriptions saying Ralph can only read issues do not describe this mode.
+- `loop` uses a prompt file (`loop.md` by default) and does not require an issue queue. In [tagged loop source](https://github.com/github/squad/blob/v1.1.0/packages/squad-cli/src/cli/commands/loop.ts#L293-L299), `configured: true` selects normal flow; false/missing selects onboarding and **continues execution**. It is not an execution or authorization gate. Historical descriptions saying Ralph can only read issues do not describe this mode.
 
 The core class starts neither recurring command. Exact doctor counts and historical bug numbers are not current compatibility promises.
 
