@@ -3,7 +3,10 @@
 Run from the workshop root. Helpers derive the root from their own path; no
 machine-specific module path is built in. Python needs only its standard
 library. Browser checks require an **already installed** Playwright module and
-browser; no helper installs packages or downloads browsers.
+browser; the QA helpers do not install Playwright packages or download browsers.
+Application validation (`Test-AiNextLab.ps1`, also invoked by the browser
+lifecycle helper) does run `npm ci` against the Microsoft CFS registry
+(`https://packagefeedproxy.microsoft.io/npm/`) to install the app's dependencies.
 
 Playwright resolution: `PLAYWRIGHT_MODULE_PATH` if set, otherwise Node module
 resolution, then `npm root --global`. Windows defaults to installed Edge;
