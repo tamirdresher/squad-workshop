@@ -1,12 +1,42 @@
 # Squad Workshop
 
+<!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
+
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Check links](https://github.com/joslat/squad-workshop/actions/workflows/check-links.yml/badge.svg)](https://github.com/joslat/squad-workshop/actions/workflows/check-links.yml)
-[![Verify script](https://github.com/joslat/squad-workshop/actions/workflows/verify-script.yml/badge.svg)](https://github.com/joslat/squad-workshop/actions/workflows/verify-script.yml)
+[![Check links](https://github.com/tamirdresher/squad-workshop/actions/workflows/check-links.yml/badge.svg)](https://github.com/tamirdresher/squad-workshop/actions/workflows/check-links.yml)
+[![Verify script](https://github.com/tamirdresher/squad-workshop/actions/workflows/verify-script.yml/badge.svg)](https://github.com/tamirdresher/squad-workshop/actions/workflows/verify-script.yml)
 
-> Workshop: assemble your AI dev team with Squad and ship a full-stack app in minutes.
+## AI NEXT: the three-hour course
 
-> **Targets Squad CLI `0.9.4`.** Newer Squad CLI versions should work — if `squad doctor` reports `0 failed`, you're fine even if the `passed` / `info` counts differ from what the workshop shows. The minimums for every other tool are in the [prerequisites table](#prerequisites) below.
+**Start with the [timed learner lab](docs/ai-next/learner-lab.md).** This is the single-day route: **180 minutes including a 10-minute break, with 126 minutes hands-on**. Run a prepared .NET 10 + React + TypeScript + SQLite Reading List, initialize a small team, implement mark-read, reuse a recorded decision when adding filtering, then review the diff and export evidence. No public repository, push, autonomous loop or blanket permission grant is required.
+
+| Resource | Purpose |
+|---|---|
+| [Learner lab](docs/ai-next/learner-lab.md) | Four timed exercises, prompts, checks and labelled manual/prepared fallback |
+| [Course prerequisites](docs/ai-next/prerequisites.md) | Managed-feed setup, pinned stable baseline and live Copilot entitlement gate |
+| [Instructor guide](docs/ai-next/instructor.md) | Preparation, timeboxes, recovery points and assessment |
+| [Presentation](presentations/ai-next-squad.html) | Self-contained HTML deck with keyboard navigation, notes and print view |
+| [Starter and checkpoints](labs/ai-next/README.md) | Reproducible `starter`, `read` and `filter` states |
+| [Source and validation status](docs/ai-next/upstream-and-provenance.md) | Canonical product location, provenance boundaries and verification receipts |
+
+```powershell
+git clone https://github.com/tamirdresher/squad-workshop.git
+Set-Location squad-workshop
+# Complete the course prerequisite gate before selecting the live route.
+.\scripts\New-AiNextLab.ps1 -Checkpoint starter -Destination .\reading-list-squad-lab
+```
+
+The **course** is `tamirdresher/squad-workshop`. The **Squad product** is now [github/squad](https://github.com/github/squad), with [official documentation](https://github.github.com/squad/). The npm package remains `@bradygaster/squad-cli`. The old `bradygaster/squad` repository is a fork, not a redirect to the canonical product.
+
+**Baseline:** stable Squad **1.1.0**, rechecked against official release/source and Microsoft CFS on 2026-11-10. Source validation is not a clean-machine rehearsal or proof of a learner's Copilot entitlement; see the [verification record](docs/ai-next/upstream-and-provenance.md). Prepared/manual work does not demonstrate live agent routing or memory retrieval.
+
+---
+
+## Extended workshop (retained)
+
+The original modules below total approximately **195 minutes before breaks**. They are retained as a version-specific extended route, not the AI NEXT three-hour agenda.
+
+> **Historical baseline: Squad CLI `0.9.4`.** Do not treat its commands, model names, doctor output or old upstream issue reports as proof of compatibility with the current release. Use the AI NEXT prerequisites for a new class.
 
 You've used AI assistants. You've pasted context fifty times. You've re-explained the architecture to a new chat window.
 
@@ -71,7 +101,7 @@ All lines should show `PASS`. Fix any that don't before opening Module 1.
 ### Start
 
 ```powershell
-git clone https://github.com/joslat/squad-workshop.git
+git clone https://github.com/tamirdresher/squad-workshop.git
 cd squad-workshop
 .\scripts\Verify-Prerequisites.ps1
 ```
@@ -112,7 +142,7 @@ Then ask anything: "I'm on Module 1 Step 4 and the team isn't generating tests" 
 
 Spotted a broken step? Tool version changed? Want to propose a new module?
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) or [open an issue](https://github.com/joslat/squad-workshop/issues/new/choose).
+See [CONTRIBUTING.md](CONTRIBUTING.md) or [open an issue](https://github.com/tamirdresher/squad-workshop/issues/new/choose).
 
 ---
 

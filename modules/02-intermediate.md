@@ -1,5 +1,9 @@
 # Module 2 — Intermediate: Compound the Memory and Inspect the Artifacts
 
+<!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
+
+> **Retained extended route, historical Squad 0.9.4 baseline.** Use the [AI NEXT learner lab](../docs/ai-next/learner-lab.md) for the bounded three-hour class. Its current course has a local review/evidence gate and requires no push or public repository.
+
 > The point of this module: see whether the second feature goes faster because the repo *remembers*, or whether the team retraces the same steps. Then look inside `.squad/` and judge for yourself.
 
 ← Back to [Workshop Index](../README.md) · [← Module 1 (Basic)](01-basic.md)
@@ -123,9 +127,9 @@ If you want to see the riskier corners — observability with .NET Aspire, and S
 
 ## Learn more
 
-- [Squad cookbook — recipes](https://bradygaster.github.io/squad/docs/cookbook/recipes) — practical patterns for common Squad workflows
-- [Building resilient agents](https://bradygaster.github.io/squad/docs/guide/building-resilient-agents) — handling failure, retries, and partial work
-- [Context budget optimization](https://github.com/bradygaster/squad/issues/1037) — how `.squad/` memory grows and what to do when it bloats
+- [Squad cookbook — recipes](https://github.github.com/squad/docs/cookbook/recipes) — practical patterns for common Squad workflows
+- [Building resilient agents](https://github.github.com/squad/docs/guide/building-resilient-agents) — handling failure, retries, and partial work
+- [Current upstream issues](https://github.com/github/squad/issues) — investigate context-budget behavior here; historical fork issue #1037 has not been mapped to a current issue
 
 ---
 

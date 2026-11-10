@@ -1,5 +1,9 @@
 # Module 3 — Advanced: Observe with Aspire, Then Hand the Wheel to Ralph
 
+<!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
+
+> **Retained extended route, historical Squad 0.9.4 baseline.** This module is not part of the bounded [AI NEXT learner lab](../docs/ai-next/learner-lab.md). Do not run these old recurring-execution examples against a real repository without a separately approved isolation/permission/stop plan and current installed-help checks. Stop-file recipes and historical fork issue numbers are not verified for Squad 1.1.0; the core course starts no recurring loops.
+
 > Two optional capabilities — both worth knowing about, neither needed for daily work. The Aspire section was rough on at least one machine in the wild, so it's documented here honestly rather than glossed over. The Ralph section is your introduction to autonomous mode without giving up your Saturday.
 
 ← Back to [Workshop Index](../README.md) · [← Module 2 (Intermediate)](02-intermediate.md)
@@ -195,20 +199,19 @@ Now the real thing — Ralph will spawn a Copilot session to actually work on is
 
 - Confirm `gh auth status` is green.
 - Confirm `main` is protected on GitHub (Settings → Branches → require review). Ralph will push branches and open PRs; branch protection is your last safety net.
-- Plan to walk away. Watch mode is meant to run while you're doing something else; sitting and staring at it defeats the point.
+- Keep an operator present for a separately approved rehearsal. Do not treat autonomous execution as permission to publish, push or merge.
 - Cap the cost: `--max-concurrent 1`, `--timeout 20`, and `--overnight-start/--overnight-end` if relevant.
 
 **Run it:**
 
 ```powershell
 squad triage --execute --interval 5 `
-  --copilot-flags "--yolo --agent squad" `
   --max-concurrent 1 `
   --timeout 20 `
   --log-file .\ralph.log
 ```
 
-> **Known limitation — specialists don't act like specialists in `--execute` mode** (upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081)): When Ralph spawns a session for a `squad:bishop`-labeled issue, the spawned agent receives a **generic Ralph prompt**, not Bishop's actual charter. The `squad:{member}` label is used only as a routing filter — it is never injected into the spawn prompt as a role assignment. The spawned agent has no specialist knowledge of who it's supposed to be. For quality specialist work, use interactive `copilot --agent squad` sessions instead. `--execute` is most useful for small, well-defined tasks where specialist nuance doesn't matter much.
+> **Historical limitation — specialists did not act like specialists in `--execute` mode** (fork issue #1081; not mapped or revalidated for 1.1.0): The old report described a **generic Ralph prompt**, not the specialist's actual charter, in spawned sessions. It treated the `squad:{member}` label as a routing filter rather than a role assignment. Consult [current upstream issues](https://github.com/github/squad/issues) and verify current behavior before planning any separately approved autonomous exercise. The AI NEXT core class does not run `--execute`.
 
 What happens each round:
 
@@ -329,10 +332,10 @@ Whether to keep Squad on a real project is now a judgement call you can make wit
 
 ## Learn more
 
-- [Build autonomous agents with Squad](https://bradygaster.github.io/squad/docs/guide/build-autonomous-agent) — deep dive into Ralph's architecture and configuration
-- [Building resilient agents](https://bradygaster.github.io/squad/docs/guide/building-resilient-agents) — patterns for agents that handle failure gracefully
-- [Squad cookbook — recipes](https://bradygaster.github.io/squad/docs/cookbook/recipes) — practical patterns for loop instructions and triage workflows
-- [Open issues on bradygaster/squad](https://github.com/bradygaster/squad/issues) — current known bugs and feature proposals
+- [Build autonomous agents with Squad](https://github.github.com/squad/docs/guide/build-autonomous-agent) — deep dive into Ralph's architecture and configuration
+- [Building resilient agents](https://github.github.com/squad/docs/guide/building-resilient-agents) — patterns for agents that handle failure gracefully
+- [Squad cookbook — recipes](https://github.github.com/squad/docs/cookbook/recipes) — practical patterns for loop instructions and triage workflows
+- [Open issues on github/squad](https://github.com/github/squad/issues) — current known bugs and feature proposals
 
 ---
 

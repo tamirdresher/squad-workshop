@@ -1,5 +1,7 @@
 # Squad Workshop — Deep Review & Improvement Plan
 
+> **Historical May 2026 audit, not a current runbook.** Current upstream is [github/squad](https://github.com/github/squad), with [official documentation](https://github.github.com/squad/). Use the [AI NEXT instructor guide](../ai-next/instructor.md) for the current course; historical findings below have not been revalidated.
+
 > **Document type:** In-depth audit + implementation plan  
 > **Review date:** 2026-05-08  
 > **Reviewer:** GitHub Copilot  
@@ -436,11 +438,11 @@ under the [Apache License 2.0](LICENSE) that covers this project.
 **Severity:** LOW  
 **File:** `modules/01-basic.md`  
 
-Module 2 and Module 3 both have `← Back to [Workshop Index](../README.md)` in their **header** navigation. Module 1 also has it in the header. However, Module 1's footer only has a forward link to Module 2:
+Module 2 and Module 3 both had a "Back to Workshop Index" link in their **header** navigation. Module 1 also had it in the header. However, Module 1's footer only had a forward link to Module 2:
 
-> If you want to test whether the persistent memory actually compounds... continue to **[Module 2 — Intermediate](02-intermediate.md)**.
+> If you want to test whether the persistent memory actually compounds... continue to **[Module 2 — Intermediate](../../modules/02-intermediate.md)**.
 
-There is no `← Back to [Workshop Index](../README.md)` link in the Module 1 footer. Modules 2 and 3 both have the back link in the header (which is above the content). On a long page, a reader who scrolled to the bottom of Module 1 has no easy navigation back to the workshop index without scrolling all the way up.
+There was no "Back to [Workshop Index](../../README.md)" link in the Module 1 footer. Modules 2 and 3 had the back link in the header (above the content). On a long page, a reader who scrolled to the bottom of Module 1 had no easy navigation back to the workshop index without scrolling all the way up.
 
 **Fix:** Add a footer nav line to `modules/01-basic.md` after the Module 2 forward link:
 ```markdown

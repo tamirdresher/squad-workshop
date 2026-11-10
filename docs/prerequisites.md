@@ -1,5 +1,10 @@
 # Prerequisites
 
+<!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
+
+> **For the three-hour AI NEXT course, use [course prerequisites](ai-next/prerequisites.md).**
+> This page and `Verify-Prerequisites.ps1` retain the older extended workshop's version checks; a PASS here does not certify the current Squad release, managed-feed reachability or live Copilot entitlement.
+
 > **Windows only:** This workshop uses `winget` for installation. macOS and Linux users will need to substitute equivalent package manager commands.
 >
 > Run `.\scripts\Verify-Prerequisites.ps1` from the repo root to check all tools in one pass.
@@ -18,7 +23,7 @@ This page is the authoritative prerequisites reference for the Squad Workshop. A
 | GitHub CLI | 2.89.0 | `gh version` | `winget install GitHub.cli` |
 | GitHub CLI auth | logged in | `gh auth status` | `gh auth login` |
 | GitHub Copilot CLI | 1.0.24 | `copilot --version` | `winget install GitHub.Copilot` |
-| Squad CLI | 0.9.4 | `squad --version` | `npm install -g @bradygaster/squad-cli` |
+| Squad CLI (extended route baseline) | 0.9.4 | `squad --version` | See the pinned CFS install below |
 | PowerShell exec policy | RemoteSigned | `Get-ExecutionPolicy -Scope CurrentUser` | `Set-ExecutionPolicy ...` |
 
 ---
@@ -146,19 +151,15 @@ squad --version
 
 **Expected:** `0.9.4` or later
 
-**If not installed:**
+**Before installing or updating:** complete the [current course preflight](ai-next/prerequisites.md). The AI NEXT baseline is stable 1.1.0; install it through Microsoft CFS:
 
 ```powershell
-npm install -g @bradygaster/squad-cli
+npm install -g @bradygaster/squad-cli@1.1.0 --registry https://packagefeedproxy.microsoft.io/npm/
 ```
 
-**If outdated:**
+Do not use `@latest`, a preview, or a public-registry bypass to fix a managed-feed failure. The repository `.npmrc` and `NuGet.Config` select Microsoft CFS; participant labs also need their own feed configuration.
 
-```powershell
-npm install -g @bradygaster/squad-cli@latest
-```
-
-> Earlier versions (0.9.1 and below) had two rough edges in `squad doctor` — a missing `casting/registry.json` and noisy false-positive warnings. Both are fixed in 0.9.4, so just upgrade and move on.
+> The doctor examples in the extended modules describe 0.9.4, not a guarantee about a current release. Compare installed help and actual errors rather than assuming any newer version is compatible.
 
 ---
 

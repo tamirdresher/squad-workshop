@@ -1,5 +1,9 @@
 # Module 1 — Basic: Build a Tiny Full-Stack App with Your Repo-Native AI Team
 
+<!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
+
+> **Retained extended route, historical Squad 0.9.4 baseline.** For the bounded three-hour class use the [AI NEXT learner lab](../docs/ai-next/learner-lab.md). Recheck current help and approved versions before using these older steps.
+
 > A solo-dev workshop: build something with Squad, not just opinions.
 
 ← Back to [Workshop Index](../README.md)
@@ -141,7 +145,7 @@ The two `ℹ️` info lines are not warnings — Squad explicitly tells you they
 
 > The exact `v22.5.0` Node line will show your installed Node version — anything ≥22.5.0 is fine.
 
-> **If you're stuck on v0.9.1:** `squad init` won't scaffold `casting/registry.json` and `squad doctor` will report two warnings instead of info. Either upgrade (`npm install -g @bradygaster/squad-cli@latest`) or check the [CHANGELOG](https://github.com/bradygaster/squad/blob/main/CHANGELOG.md) for your version.
+> **Historical v0.9.1 warning:** that version did not scaffold `casting/registry.json`. For the current course, install the pinned release (`npm install -g @bradygaster/squad-cli@1.1.0 --registry https://packagefeedproxy.microsoft.io/npm/`) and check the [canonical CHANGELOG](https://github.com/github/squad/blob/main/CHANGELOG.md); old doctor counts are not current guarantees.
 
 > **If you're on a newer Squad CLI than this workshop targets** (see the version declared at the top of the [README](../README.md)) and the summary numbers differ — different `passed` count, different `info` count — that's expected. Squad CLI adds checks on minor bumps. The signal that matters is **`0 failed`**.
 
@@ -167,19 +171,9 @@ You should see the Copilot CLI banner with `GitHub Copilot v1.0.24`, a connected
 > The Squad README says it directly: *"The interactive shell (squad with no arguments) has been deprecated. For the best Squad experience, use the GitHub Copilot CLI instead."*
 > Copilot CLI gives you tool execution, agent routing, MCP access, and full Squad integration from the terminal.
 
-### Enabling auto-approve (optional but recommended)
+### Keep permissions bounded
 
-Squad makes many tool calls per session. To avoid approving each one:
-
-```
-/allow-all
-```
-
-This is the equivalent of the `--yolo` flag. You can also start with:
-
-```powershell
-copilot --agent squad --yolo
-```
+Stay in the participant lab directory and approve only the file changes and scoped test commands needed for the current exercise. Do not enable blanket auto-approval. Deny requests to read credentials, change global configuration, publish a repository, push, merge, or start recurring background work. Stop the session if it acts outside the assigned feature.
 
 ### Selecting the right model
 
@@ -430,9 +424,9 @@ If you want to test whether the persistent memory actually compounds — i.e., w
 
 ## Learn more
 
-- [Squad official guide](https://bradygaster.github.io/squad/docs/guide) — comprehensive reference for all Squad concepts
-- [Sample prompts](https://bradygaster.github.io/squad/docs/sample-prompts) — vetted prompt patterns to copy and adapt
-- [Squad FAQ](https://bradygaster.github.io/squad/docs/guide/faq) — common questions and gotchas
+- [Squad official guide](https://github.github.com/squad/docs/guide) — comprehensive reference for all Squad concepts
+- [Sample prompts](https://github.github.com/squad/docs/sample-prompts) — vetted prompt patterns to copy and adapt
+- [Squad FAQ](https://github.github.com/squad/docs/guide/faq) — common questions and gotchas
 
 ---
 

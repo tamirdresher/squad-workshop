@@ -1,5 +1,7 @@
 # Contributing to Squad Workshop
 
+<!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
+
 Thanks for helping improve this workshop. Contributions fall into a few categories — each has its own lightweight process.
 
 ---
@@ -86,7 +88,7 @@ Before requesting review:
 ## What this repo is not
 
 Please don't open issues or PRs for:
-- **Squad CLI bugs** — those go to [bradygaster/squad](https://github.com/bradygaster/squad) (the npm package is `@bradygaster/squad-cli`; the source repo is `bradygaster/squad`)
+- **Squad CLI bugs** — those go to [github/squad](https://github.com/github/squad) (the npm package remains `@bradygaster/squad-cli`; `bradygaster/squad` is a fork, not the canonical upstream)
 - **GitHub Copilot CLI issues** — those go to GitHub support
 - Feature requests for Squad itself — this repo documents Squad, it doesn't build it
 
@@ -94,4 +96,4 @@ Please don't open issues or PRs for:
 
 ## License
 
-By contributing to this workshop, you agree that your contributions will be licensed under the same [Apache License 2.0](../LICENSE) as the rest of the repository. You confirm that you have the right to submit the work under this license.
+By contributing to this workshop, you agree that your contributions will be licensed under the same [Apache License 2.0](LICENSE) as the rest of the repository. You confirm that you have the right to submit the work under this license.

@@ -1,8 +1,9 @@
 blank_issues_enabled: false
+# Modified for the AI NEXT course refresh on 2026-11-10.
 contact_links:
   - name: Questions and discussion
-    url: https://github.com/joslat/squad-workshop/discussions
+    url: https://github.com/tamirdresher/squad-workshop/issues/new/choose
     about: Ask questions, share experiences, and discuss the workshop here.
   - name: Squad CLI issues
-    url: https://github.com/bradygaster/squad
-    about: Bugs in Squad itself (not the workshop content) go to the Squad CLI repo. The npm package is `@bradygaster/squad-cli`; the source repo is `bradygaster/squad`.
+    url: https://github.com/github/squad/issues
+    about: Bugs in Squad itself (not this course) go to github/squad. The npm package remains @bradygaster/squad-cli.

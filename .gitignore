@@ -1,4 +1,5 @@
 # IDE and editor
+# Modified for the AI NEXT course refresh on 2026-11-10.
 .vscode/
 .idea/
 *.suo
@@ -11,6 +12,10 @@ desktop.ini
 
 # Workshop lab repo (created during Module 1 — not part of this repo)
 reading-list-squad-lab/
+reading-list-squad-lab-*/
+
+# Disposable, scoped course validation (not learner source).
+.course-validation/
 
 # Squad runtime artifacts (Ralph) — these typically live in the lab repo
 # (already excluded above) but are listed here as a pattern for downstream users

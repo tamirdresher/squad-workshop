@@ -1,5 +1,7 @@
 # Changelog
 
+<!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
+
 All notable changes to this workshop will be documented here.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
@@ -9,6 +11,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- AI NEXT three-hour route: four timed hands-on labs (126 minutes), a 10-minute break, instructor/preflight notes, a self-contained HTML presentation, and original Reading List starter/read/filter checkpoints.
+- Microsoft CFS package defaults, a bounded local review/evidence workflow, and explicit prepared/manual fallback with separate live-entitlement and rehearsal gates.
 - AI coaching infrastructure: `.github/agents/squad-coach.agent.md` (invokable with `copilot --agent squad-coach`), `.github/prompts/debug-step.prompt.md`, `.github/prompts/inspect-squad-artifacts.prompt.md`
 - `scripts/Install-WorkshopAgents.ps1` — installs the coach agent and prompt files into the lab repo's `.github/` so Copilot CLI can discover them; refuses to overwrite without `-Force`
 - `.github/copilot-instructions.md` — always-on Squad context injected into every VS Code Copilot Chat session in this repo
@@ -26,13 +30,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Navigation footers on all three modules
 
 ### Changed
+- The current course repository is `tamirdresher/squad-workshop`; canonical Squad product links use `github/squad` and `github.github.com/squad/`, with the package name unchanged.
+- Retained modules are explicitly a historical 195-minute extended route, not the three-hour class.
 - **Upgraded from .NET 9 (STS, EOL May 2026) to .NET 10 LTS** (supported through November 2028) — all module prompts, prerequisite tables, and `scripts/Verify-Prerequisites.ps1` updated
 - `docs/prerequisites.md`: added Windows-only note (workshop uses `winget` throughout)
 - `README.md`: added Windows-only note near prerequisites section; removed redundant "Module summaries" prose section (the table + scope-note already cover the same information)
 - `docs/troubleshooting.md`: renamed `squad watch --execute` heading to `squad triage --execute` (formerly `squad watch`) — body now uses the modern name, with a single parenthetical alias for search discoverability
 
 ### Fixed
-- `.github/ISSUE_TEMPLATE/config.yml`, `CONTRIBUTING.md`: replaced 404 URL `https://github.com/bradygaster/squad-cli` with the real source repo `https://github.com/bradygaster/squad` (the npm package is `@bradygaster/squad-cli`; the GitHub repo is `bradygaster/squad`)
+- `.github/ISSUE_TEMPLATE/config.yml`, `CONTRIBUTING.md`: canonical source links now target [github/squad](https://github.com/github/squad), superseding the earlier fix to the former fork location; the npm package remains `@bradygaster/squad-cli`.
 - `README.md`: documented coach-agent install flow — agents in this repo are not discoverable from the lab repo's working directory unless copied in (now handled by `scripts/Install-WorkshopAgents.ps1`)
 - `modules/01-basic.md`: replaced `vXX.XX.X` placeholder in `squad doctor` expected-output with a real example version and an annotation that the line varies per install
 - `scripts/Verify-Prerequisites.ps1`: removed unused `$results` variable; flipped a `$null` equality comparison to put `$null` on the left (PSScriptAnalyzer recommendation)

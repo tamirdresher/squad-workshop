@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Squad in 3 Hours | AI NEXT</title>
+  <link rel="icon" href="data:,">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font: 20px/1.5 "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    a { color: var(--cp-link); text-underline-offset: 4px; }
+    button, select {
+      font: inherit;
+      font-size: 15px;
+      padding: 8px 12px;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+    }
+    button:hover { border-color: var(--cp-accent); }
+    button:disabled { opacity: 0.45; cursor: default; }
+    :focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
+    .masthead {
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: 14px;
+    }
+    .masthead strong { color: var(--cp-accent); letter-spacing: 0.12em; }
+    main { max-width: 1440px; margin: auto; }
+    .slide {
+      min-height: calc(100vh - 144px);
+      padding: 36px 64px 56px;
+    }
+    .js .slide { display: none; }
+    .js .slide.active, .js.all .slide { display: block; }
+    .all .slide { border-bottom: 1px solid var(--cp-border); }
+    .eyebrow {
+      color: var(--cp-accent);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+    }
+    h1 { font-size: clamp(48px, 6vw, 88px); line-height: 1.05; max-width: 900px; margin: 24px 0; letter-spacing: -0.035em; }
+    h2 { font-size: clamp(30px, 3.2vw, 48px); line-height: 1.15; margin: 8px 0 28px; letter-spacing: -0.025em; }
+    h3 { font-size: 22px; line-height: 1.25; margin: 0 0 12px; }
+    p { margin: 0 0 16px; }
+    .subtitle { font-size: 28px; max-width: 920px; color: var(--cp-text-muted); }
+    .muted, .small { color: var(--cp-text-muted); }
+    .small { font-size: 17px; }
+    .badges { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0; }
+    .badge { padding: 8px 16px; background: var(--cp-accent-soft); color: var(--cp-accent); border-radius: 0.625rem; font-size: 16px; font-weight: 600; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    .thirds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { padding: 24px; background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px; min-width: 0; }
+    .card p:last-child { margin-bottom: 0; }
+    .accent { background: var(--cp-accent-soft); border-color: var(--cp-accent); }
+    .takeaway { margin-top: 28px; font-size: 22px; font-weight: 600; color: var(--cp-accent); max-width: 1100px; }
+    .metric { font-size: 68px; line-height: 1.1; color: var(--cp-accent); display: block; font-weight: 700; }
+    .step { font-size: 36px; color: var(--cp-accent); font-weight: 700; margin-bottom: 12px; display: block; }
+    .flow { display: flex; align-items: stretch; gap: 16px; margin: 28px 0; }
+    .flow .card { flex: 1; }
+    .arrow { align-self: center; color: var(--cp-accent); font-size: 28px; }
+    pre { margin: 12px 0 0; padding: 20px; background: var(--cp-surface-soft); border: 1px solid var(--cp-border); border-radius: 0.625rem; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 18px; }
+    code { font-family: Consolas, "Courier New", Courier, monospace; overflow-wrap: anywhere; }
+    :not(pre) > code { font-size: 0.87em; background: var(--cp-surface-soft); padding: 2px 6px; border-radius: 4px; }
+    ul, ol { padding-left: 24px; margin: 0; }
+    li { margin-bottom: 10px; }
+    table { border-collapse: collapse; width: 100%; font-size: 17px; }
+    th, td { padding: 8px 12px; border-bottom: 1px solid var(--cp-border); text-align: left; }
+    th { color: var(--cp-accent); }
+    .lab h2 { max-width: 1100px; }
+    .clock { font-size: 18px; color: var(--cp-text-muted); white-space: nowrap; }
+    .notes { display: none; margin-top: 28px; padding: 20px; border: 1px dashed var(--cp-border-strong); border-radius: 0.625rem; font-size: 17px; color: var(--cp-text-soft); }
+    .show-notes .notes { display: block; }
+    .controls { position: sticky; bottom: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; background: var(--cp-panel-strong); border-top: 1px solid var(--cp-border); }
+    .counter { min-width: 68px; text-align: center; font-size: 15px; color: var(--cp-text-muted); }
+    #jump { max-width: 300px; }
+    .hint { margin-left: 8px; font-size: 13px; color: var(--cp-text-muted); }
+    @media (max-width: 850px) {
+      .slide { padding: 24px 24px 40px; }
+      .grid, .thirds { grid-template-columns: 1fr; }
+      .flow { flex-direction: column; }
+      .arrow { transform: rotate(90deg); }
+      .masthead { padding: 12px 24px; }
+      .subtitle { font-size: 23px; }
+      .hint { display: none; }
+      #jump { max-width: 180px; }
+      .controls { position: static; }
+      body { font-size: 18px; }
+    }
+    @media print {
+      .masthead, .controls, .notes { display: none !important; }
+      .js .slide, .slide { display: block !important; min-height: auto; break-after: page; padding: 24px; }
+      .slide:last-child { break-after: auto; }
+      h1 { font-size: 54px; }
+      h2 { font-size: 32px; }
+      pre, .card { break-inside: avoid; }
+      a { color: var(--cp-text); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Original AI NEXT course presentation, 2026-11-10. No copied reference assets. -->
+  <header class="masthead"><strong>AI NEXT / ENGINEERING WITH AGENTS</strong><span>Squad 1.1.0 course baseline</span></header>
+  <main>
+    <section class="slide" id="slide-1" data-title="Squad in 3 Hours">
+      <p class="eyebrow">One application. A resident team. A human decision.</p>
+      <h1>Squad in<br>3 Hours</h1>
+      <p class="subtitle">Build a feature, test a team's memory, and decide whether its changes deserve to ship.</p>
+      <div class="badges"><span class="badge">Four guided labs</span><span class="badge">126 minutes hands-on</span><span class="badge">No cloud deployment</span></div>
+      <p><a href="../docs/ai-next/learner-lab.md">Learner guide</a> &middot; <a href="../docs/ai-next/prerequisites.md">Preflight</a> &middot; <a href="../docs/ai-next/instructor.md">Instructor notes</a></p>
+      <aside class="notes">Use the same teaching rhythm as the Aspire course: a small mental model, a bounded task, an observable checkpoint, then a short debrief. The full learner instructions live in the linked guide, not on crowded slides. Announce whether today's class is using the live or prepared/manual route.</aside>
+    </section>
+    <section class="slide" id="slide-2" data-title="The 180-minute plan">
+      <p class="eyebrow">The clock is a constraint</p>
+      <h2>180 minutes. 70% hands-on.</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Build + change</h3>
+          <table aria-label="First half schedule"><tr><th>Minutes</th><th>Activity</th></tr><tr><td>00&ndash;12</td><td>Problem and mental model</td></tr><tr><td>12&ndash;22</td><td>Instructor demonstration</td></tr><tr><td>22&ndash;52</td><td>Lab 1 &middot; Run and cast</td></tr><tr><td>52&ndash;60</td><td>Debrief</td></tr><tr><td>60&ndash;95</td><td>Lab 2 &middot; Mark read</td></tr></table>
+        </div>
+        <div class="card">
+          <h3>Remember + review</h3>
+          <table aria-label="Second half schedule"><tr><th>Minutes</th><th>Activity</th></tr><tr><td>95&ndash;105</td><td>10-minute break</td></tr><tr><td>105&ndash;140</td><td>Lab 3 &middot; Reuse a decision</td></tr><tr><td>140&ndash;166</td><td>Lab 4 &middot; Review and evidence</td></tr><tr><td>166&ndash;180</td><td>Takeaways and next steps</td></tr></table>
+          <p class="small">30 + 35 + 35 + 26 = 126 hands-on minutes.</p>
+        </div>
+      </div>
+      <p class="takeaway">Checkpoint recovery protects learning time; it does not prove that the agent succeeded.</p>
+      <aside class="notes">Start the class clock after preflight. This is a timed design, not a measured clean-machine rehearsal. Keep the 10-minute break. If setup is failing, switch to a new prepared checkpoint rather than consuming the next lab or erasing a learner's work.</aside>
+    </section>
+    <section class="slide" id="slide-3" data-title="The context reset problem">
+      <p class="eyebrow">Why a team rather than another prompt?</p>
+      <h2>The expensive part is the reset.</h2>
+      <div class="grid">
+        <div class="card"><h3>One session at a time</h3><p>Architecture is explained again. A new task forgets the old constraint. Review repeats the same discussion.</p><span class="metric">?</span><p class="small">Who owned the decision? Where is the evidence?</p></div>
+        <div class="card accent"><h3>A repository-native team</h3><p>Explicit roles route the work. Decisions are inspectable files. A second iteration can retrieve the same constraint.</p><span class="metric">1</span><p class="small">Shared decision that we will actually test.</p></div>
+      </div>
+      <p class="takeaway">More agents can also mean more coordination, cost and contradictory changes.</p>
+      <aside class="notes">Do not promise a productivity multiplier. The experiment is whether this team follows a specific decision after a fresh session. A single assistant may be the better choice for a small local edit.</aside>
+    </section>
+    <section class="slide" id="slide-4" data-title="The Squad mental model">
+      <p class="eyebrow">Before Lab 1</p>
+      <h2>A small team, not five parallel guesses.</h2>
+      <div class="flow"><div class="card"><span class="step">01</span><h3>You</h3><p>Bounded spec, permissions and acceptance criteria.</p></div><span class="arrow" aria-hidden="true">&rarr;</span><div class="card"><span class="step">02</span><h3>Coordinator</h3><p>Routes implementation, test and decision work.</p></div><span class="arrow" aria-hidden="true">&rarr;</span><div class="card"><span class="step">03</span><h3>Human gate</h3><p>Inspect tests and diff. Accept or request changes.</p></div></div>
+      <div class="grid"><div class="card"><h3>Working roles</h3><p>Implementation, testing, and a lead/reviewer. Scribe consolidates decisions. Names are a cast; responsibilities are the contract.</p></div><div class="card"><h3>Persistent context</h3><p><code>.squad/</code> state and charters; <code>.github/agents/squad.agent.md</code> coordinator discovery.</p></div></div>
+      <aside class="notes">A role is not a second human, and a reviewer persona is not proof of independence. The learner owns the final review decision. Inspect actual files and routing rather than inferring them from a friendly agent name.</aside>
+    </section>
+    <section class="slide" id="slide-5" data-title="Names and version boundaries">
+      <p class="eyebrow">Product move, not course move</p>
+      <h2>Three names. Three different purposes.</h2>
+      <div class="grid thirds">
+        <div class="card"><h3>Product source</h3><p><a href="https://github.com/github/squad">github/squad</a></p><p class="small">Canonical upstream. The former bradygaster/squad repository is a fork, not a redirect.</p></div>
+        <div class="card"><h3>CLI package</h3><p><code>@bradygaster/squad-cli</code></p><p class="small">The package name did not change. Stable course pin: 1.1.0, available through CFS.</p></div>
+        <div class="card"><h3>Participant course</h3><p><a href="https://github.com/tamirdresher/squad-workshop">tamirdresher/squad-workshop</a></p><p class="small">Clone the course, not the Squad product. Create a separate participant lab inside it.</p></div>
+      </div>
+      <p class="takeaway">Use the <a href="https://github.github.com/squad/">official docs</a>, then check installed help. Historical module flags are not a current contract.</p>
+      <aside class="notes">Stable release, source manifest and CFS metadata were rechecked on 2026-11-10. Main-branch docs can move faster than the pinned release. Recheck before every class. No preview build is needed for these exercises.</aside>
+    </section>
+    <section class="slide" id="slide-6" data-title="Demo: from scaffold to evidence">
+      <p class="eyebrow">Instructor demo &middot; minutes 12&ndash;22</p>
+      <h2>Show the boundaries before the magic.</h2>
+      <div class="grid"><div class="card"><h3>In a new participant repository</h3><pre><code>squad init --roles --no-workflows --state-backend local
+squad doctor
+squad cast
+copilot --agent squad</code></pre></div><div class="card"><h3>Observe, don't infer</h3><ol><li>Inspect the actual team and routing files.</li><li>Make one bounded live request, if entitled.</li><li>Identify the specialist and source file it used.</li><li>Stop before remote changes or broader permissions.</li></ol></div></div>
+      <p class="takeaway">Installed CLI + successful doctor &ne; an entitled live Copilot session.</p>
+      <aside class="notes">Use a disposable participant directory, never initialize a team in the course root. Doctor may report missing optional packages as info; inspect failures rather than demanding old counts. If the live request fails on entitlement, quota or policy, switch honestly to prepared/manual work.</aside>
+    </section>
+    <section class="slide lab" id="slide-7" data-title="Lab 1: run and cast" data-kind="lab" data-start="22" data-duration="30">
+      <p class="eyebrow">Lab 1 &middot; minutes 22&ndash;52 &middot; 30 minutes</p>
+      <h2>Run the app. Make the team inspectable.</h2>
+      <div class="grid">
+        <div class="card"><h3>Objective</h3><p>Run the Reading List starter and identify the team members, their responsibilities and the coordinator file.</p><h3>Do this</h3><p>Create a new starter lab, initialize Git and Squad there, inspect the cast, then run the baseline checks.</p></div>
+        <div class="card"><h3>Course-root commands</h3><pre><code>.\scripts\New-AiNextLab.ps1 -Checkpoint starter -Destination .\reading-list-squad-lab
+.\scripts\Test-AiNextLab.ps1 -LabPath .\reading-list-squad-lab</code></pre></div>
+        <div class="card accent"><h3>Success criteria</h3><p>List/add works. SQLite persists a book. Tests and frontend build pass. Live route: actual role routing is observable.</p></div>
+        <div class="card"><h3>Follow here</h3><p><a href="../docs/ai-next/learner-lab.md">Learner guide &middot; Lab 1</a></p><p class="small">At the timebox, preserve work and use a NEW checkpoint directory. No entitlement? Use the labelled manual route.</p></div>
+      </div>
+      <aside class="notes">The baseline is prepared so learners spend the class on team behavior rather than waiting for full-stack scaffolding. Inspect title and author validation. Do not equate copying a starter with the team building it. Reserve the last five minutes for the actual checkpoint.</aside>
+    </section>
+    <section class="slide" id="slide-8" data-title="Debrief: what did you observe?">
+      <p class="eyebrow">Debrief &middot; minutes 52&ndash;60</p>
+      <h2>Evidence beats an agent-shaped story.</h2>
+      <div class="grid thirds"><div class="card"><span class="step">A</span><h3>Observed</h3><p>A runnable app, passing checks, actual team files and a named responsibility.</p></div><div class="card"><span class="step">B</span><h3>Not yet proved</h3><p>Correct feature code, compounding memory, independent review or production readiness.</p></div><div class="card accent"><span class="step">C</span><h3>Next experiment</h3><p>Give the team one small behavior and a falsifiable test contract.</p></div></div>
+      <p class="takeaway">Point to a file, an executed check or an observed response.</p>
+      <aside class="notes">Ask a pair to explain what happened when an operation was denied. A clean refusal and an honest fallback are useful outcomes. Do not spend this debrief debugging one laptop for the whole room.</aside>
+    </section>
+    <section class="slide" id="slide-9" data-title="The mark-read contract">
+      <p class="eyebrow">Before Lab 2</p>
+      <h2>Small feature. Explicit failure cases.</h2>
+      <div class="grid"><div class="card"><h3>One endpoint, one UI action</h3><pre><code>PATCH /api/books/{id}/read
+{"isRead": true}</code></pre><p class="small">Response: updated book. Unknown ID: 404. Missing or invalid boolean: 400.</p></div><div class="card"><h3>Tests that can disprove success</h3><ul><li>Repeat the same PATCH: no extra side effects.</li><li>Read state survives an API restart.</li><li>Missing book is not silently created.</li><li>Title/author validation still holds.</li></ul></div></div>
+      <p class="takeaway">A passing starter suite does not prove a feature that it never tests.</p>
+      <aside class="notes">The important property is idempotence: assigning true twice leaves the same state. A toggle-only API would violate that contract. Keep both backend and frontend changes bounded. Inspect the response schema as well as status codes.</aside>
+    </section>
+    <section class="slide lab" id="slide-10" data-title="Lab 2: implement mark-read" data-kind="lab" data-start="60" data-duration="35">
+      <p class="eyebrow">Lab 2 &middot; minutes 60&ndash;95 &middot; 35 minutes</p>
+      <h2>Route implementation and regression tests.</h2>
+      <div class="grid"><div class="card"><h3>Objective</h3><p>Implement the read-state contract without weakening validation or changing the book schema.</p><h3>Do this</h3><p>Give a bounded spec. Assign implementation and test responsibilities. Inspect the diff, run checks, then record the decision.</p></div><div class="card"><h3>Prompt skeleton</h3><pre><code>Add PATCH /api/books/{id}/read and a UI read control.
+Require an explicit boolean and idempotent assignment.
+Test 404, invalid input and persisted repeated requests.
+Preserve title/author validation. No remote writes.
+Report changed files and exact check results.</code></pre></div><div class="card accent"><h3>Success criteria</h3><p>Read control works; missing ID and bad input fail correctly; repeated PATCH and restart checks pass.</p></div><div class="card"><h3>Follow here</h3><p><a href="../docs/ai-next/learner-lab.md">Learner guide &middot; Lab 2</a></p><p class="small">Prepared recovery: create a NEW <code>read</code> checkpoint and compare it with your attempt. Label that recovery.</p></div></div>
+      <aside class="notes">Timebox: 5 minutes spec, 17 implementation, 8 tests/diff, 5 decision capture. Tests passing is necessary, not sufficient: inspect whether the expected assertions actually ran.</aside>
+    </section>
+    <section class="slide" id="slide-11" data-title="Break">
+      <p class="eyebrow">Minutes 95&ndash;105</p>
+      <h1>Take 10.</h1>
+      <p class="subtitle">Keep your working directory. Keep your evidence. Stop any agent task that is still expanding its scope.</p>
+      <div class="badges"><span class="badge">Resume at minute 105</span><span class="badge">Next: a fresh iteration</span></div>
+      <aside class="notes">Do not let an autonomous process run unattended during the break. This class uses explicit bounded requests, not polling loops. Leave the app running only if it is your own local process and you know how to stop it.</aside>
+    </section>
+    <section class="slide" id="slide-12" data-title="Memory needs a retrieval test">
+      <p class="eyebrow">Before Lab 3</p>
+      <h2>A memory file is not memory reuse.</h2>
+      <div class="flow"><div class="card"><span class="step">01</span><h3>Record</h3><p>One decision and why it matters.</p></div><span class="arrow" aria-hidden="true">&rarr;</span><div class="card"><span class="step">02</span><h3>Retrieve</h3><p>Fresh iteration identifies its source.</p></div><span class="arrow" aria-hidden="true">&rarr;</span><div class="card"><span class="step">03</span><h3>Apply</h3><p>Code and tests preserve that invariant.</p></div></div>
+      <div class="card accent"><h3>Today's decision</h3><p>Title and author stay trimmed, required and at most 120 characters. PATCH assigns an explicit read state idempotently. Filtering never changes stored data.</p></div>
+      <p class="takeaway">Capture the source cited, the behavior preserved and the check that proves it.</p>
+      <aside class="notes">Scribe may consolidate the inbox into decisions.md; an empty inbox does not mean the decision vanished. Inspect the installed version's actual paths. The evidence test is retrieval plus application, not a guessed directory name.</aside>
+    </section>
+    <section class="slide" id="slide-13" data-title="The filter contract">
+      <p class="eyebrow">Second iteration, same invariants</p>
+      <h2>Read a subset. Don't rewrite the list.</h2>
+      <div class="grid"><div class="card"><h3>Request behavior</h3><pre><code>GET /api/books
+GET /api/books?status=all
+GET /api/books?status=read
+GET /api/books?status=unread</code></pre><p class="small">Unknown status: 400. Same book schema. Stable ID order.</p></div><div class="card"><h3>Preservation tests</h3><ul><li>One read and one unread book: exact subsets.</li><li>Default and <code>all</code> return the same list.</li><li>Invalid status does not mutate data.</li><li>PATCH and validation still pass.</li></ul></div></div>
+      <p class="takeaway">Ask the team to find the prior decision before pasting it back into the prompt.</p>
+      <aside class="notes">A filter implementation that marks everything read while querying is incorrect even if the screen looks plausible. Verify the full list and persisted states after each filter request.</aside>
+    </section>
+    <section class="slide lab" id="slide-14" data-title="Lab 3: retrieve and filter" data-kind="lab" data-start="105" data-duration="35">
+      <p class="eyebrow">Lab 3 &middot; minutes 105&ndash;140 &middot; 35 minutes</p>
+      <h2>Make the second iteration earn its context.</h2>
+      <div class="grid"><div class="card"><h3>Objective</h3><p>Retrieve the recorded decision in a fresh session, then add all/read/unread filtering without regressing mark-read.</p><h3>Do this</h3><p>Record the cited source before implementation. Compare behavior and tests after the change.</p></div><div class="card"><h3>Prompt skeleton</h3><pre><code>Find the prior read-state and validation decision.
+Cite its file and explain the constraints first.
+Add all/read/unread filtering and a UI selector.
+Test exact subsets, invalid status and no mutation.
+Preserve prior behavior. Stop for human review.</code></pre></div><div class="card accent"><h3>Success criteria</h3><p>Cited decision + correct filter + unchanged PATCH and validation checks. Note if retrieval needed a hint.</p></div><div class="card"><h3>Follow here</h3><p><a href="../docs/ai-next/learner-lab.md">Learner guide &middot; Lab 3</a></p><p class="small">Manual route: inspect and apply the decision yourself. Do not label it autonomous retrieval.</p></div></div>
+      <aside class="notes">Reserve five minutes to compare evidence. If the agent cannot retrieve the decision, document that observation; one precise hint is allowed but must be recorded. A new filter checkpoint recovers implementation, not evidence of live memory.</aside>
+    </section>
+    <section class="slide" id="slide-15" data-title="The human review gate">
+      <p class="eyebrow">Before Lab 4</p>
+      <h2>The team prepares. You decide.</h2>
+      <div class="grid"><div class="card"><h3>Review the change</h3><ul><li>Does the diff stay inside the spec?</li><li>Are failure cases explicit?</li><li>Did the claimed tests really execute?</li><li>Does the UI expose the behavior correctly?</li></ul></div><div class="card accent"><h3>Make a concrete decision</h3><p><strong>Accept for the lab</strong> with evidence, or <strong>request changes</strong> with a precise failure and retest.</p><p class="small">An agent saying "approved" is not human approval. A local diff review is not an actual GitHub PR.</p></div></div>
+      <p class="takeaway">No push, PR creation or merge is required for this class.</p>
+      <aside class="notes">A separate reviewing learner or a reviewer role can find mistakes, but the human remains accountable. Explain how issue/spec, local feature branch and diff map to a real PR workflow without publishing the exercise.</aside>
+    </section>
+    <section class="slide lab" id="slide-16" data-title="Lab 4: review and export" data-kind="lab" data-start="140" data-duration="26">
+      <p class="eyebrow">Lab 4 &middot; minutes 140&ndash;166 &middot; 26 minutes</p>
+      <h2>Turn a claim into a review packet.</h2>
+      <div class="grid"><div class="card"><h3>Objective</h3><p>Inspect the feature diff, record the human decision and export only scoped evidence.</p><h3>Do this</h3><p>Run final checks. Review the diff against the spec. Record a finding or justify acceptance. Inspect the export before sharing.</p></div><div class="card"><h3>Course-root commands</h3><pre><code>.\scripts\Test-AiNextLab.ps1 -LabPath .\reading-list-squad-lab
+.\scripts\Export-AiNextEvidence.ps1 -LabPath .\reading-list-squad-lab</code></pre></div><div class="card accent"><h3>Success criteria</h3><p>Actual test receipt, scoped source changes, decision-retrieval observation and explicit human accept/change outcome.</p></div><div class="card"><h3>Follow here</h3><p><a href="../docs/ai-next/learner-lab.md">Learner guide &middot; Lab 4</a></p><p class="small">Never export credentials, environment dumps, unrelated files or complete private chat transcripts.</p></div></div>
+      <aside class="notes">Five minutes checks, ten review, six correction or justification, five export inspection. A generated export is not itself proof that memory worked or review was independent. Learner observations must be labelled as such.</aside>
+    </section>
+    <section class="slide" id="slide-17" data-title="Prepared is not live">
+      <p class="eyebrow">One course, honestly labelled routes</p>
+      <h2>Fallback preserves practice, not provenance.</h2>
+      <div class="grid"><div class="card"><h3>Live route</h3><p>Entitled Copilot request succeeds. Observe routing, actual edits, decision retrieval and review behavior.</p><p class="small">Network, policy, entitlement, model access and quota must all cooperate.</p></div><div class="card"><h3>Prepared/manual route</h3><p>Materialize a checkpoint, inspect or edit code, run tests, apply the decision manually and review the diff.</p><p class="small">Still needs approved dependencies/tooling unless pre-staged. Not "offline AI" or proof of agent memory.</p></div></div>
+      <p class="takeaway">Record which route produced each piece of evidence.</p>
+      <aside class="notes">Prepared checkpoints are a recovery tool and an accessible path for participants without entitlement. Do not mark learning evidence as live if a checkpoint supplied the implementation.</aside>
+    </section>
+    <section class="slide" id="slide-18" data-title="Bounded autonomy">
+      <p class="eyebrow">Advanced briefing &middot; wrap, not another lab</p>
+      <h2>A loop changes the risk, not the review gate.</h2>
+      <div class="grid"><div class="card"><h3>Know the current commands</h3><p><code>squad triage</code> polls for issue work; <code>--execute</code> adds execution.</p><p><code>squad loop</code> runs a configured prompt file; it does not require an issue queue.</p></div><div class="card accent"><h3>Before enabling either</h3><p>Define one queue/task, explicit permissions, concurrency/time bounds, an operator stop, and a human review gate.</p><p class="small">No live recurring loop, automatic permission grant, push or merge in this course.</p></div></div>
+      <p class="takeaway">Read installed help. Do not copy historical watch flags or stop-file recipes untested.</p>
+      <aside class="notes">For 1.1.0, triage defaults to ten-minute polling and documents Ctrl+C. Loop uses loop.md by default and requires configured:true in frontmatter. Present the difference; do not start either during the class. Stronger isolation and an approved operational runbook belong in a follow-on session.</aside>
+    </section>
+    <section class="slide" id="slide-19" data-title="Where the advanced agenda goes">
+      <p class="eyebrow">Keep the promise bounded</p>
+      <h2>The next step is not five more labs today.</h2>
+      <div class="grid thirds"><div class="card"><h3>Observe</h3><p>Squad + Aspire telemetry: separate optional walkthrough with Docker and a known-good signal path.</p></div><div class="card"><h3>Delegate</h3><p><code>@copilot</code>, presets, cross-squad contracts and sub-squads: one bounded ownership handoff at a time.</p></div><div class="card"><h3>Operate</h3><p>State backends, continuous loops, ACA/AKS: follow-on design, identity, quota and isolation work.</p></div></div>
+      <p class="takeaway">Today's transferable unit: spec &rarr; specialist work &rarr; evidence &rarr; human decision.</p>
+      <aside class="notes">This maps the original agenda breadth to optional follow-on topics instead of pretending all of it fits 180 minutes. No ACA or AKS resources, remote squads or public issues are provisioned in the core class.</aside>
+    </section>
+    <section class="slide" id="slide-20" data-title="What you take away">
+      <p class="eyebrow">Wrap &middot; minutes 166&ndash;180</p>
+      <h2>A working app is only half the outcome.</h2>
+      <div class="grid"><div class="card"><h3>Your implementation</h3><p>Reading List baseline, read-state feature and filter, with relevant behavior checks.</p><h3>Your decision</h3><p>One recorded invariant and an honest account of whether the next iteration retrieved it.</p></div><div class="card accent"><h3>Your review packet</h3><p>Scoped diff, actual validation receipt, route label and a human accept/change outcome.</p><h3>Your judgment</h3><p>Where a resident team helped, where a single assistant would be simpler, and what remains unproved.</p></div></div>
+      <p class="takeaway">Do not outsource the definition of done.</p>
+      <aside class="notes">Use the learner rubric. Invite one example of a failed assumption caught by a test or review. Distinguish the course's source validation from each learner's live rehearsal and from production readiness.</aside>
+    </section>
+    <section class="slide" id="slide-21" data-title="References and delivery status">
+      <p class="eyebrow">Keep this course reproducible</p>
+      <h2>Versioned code. Visible limitations.</h2>
+      <div class="grid"><div class="card"><h3>Use the exact course route</h3><p><a href="../docs/ai-next/learner-lab.md">Timed learner instructions</a><br><a href="../labs/ai-next/README.md">Starter and checkpoints</a><br><a href="../docs/ai-next/upstream-and-provenance.md">Source and validation record</a></p></div><div class="card"><h3>Recheck upstream before teaching</h3><p><a href="https://github.github.com/squad/">Official Squad docs</a><br><a href="https://github.com/github/squad/releases/tag/v1.1.0">Stable release v1.1.0</a><br><a href="../docs/ai-next/prerequisites.md">Managed feeds and live-session gate</a></p></div></div>
+      <p class="takeaway">Prepared source checks are not a clean-machine rehearsal or live Copilot entitlement proof.</p>
+      <aside class="notes">Original course content and code retain this repository's Apache-2.0 licensing and attribution. Private workshop repositories were not copied. The local Aspire reference informed teaching structure only; its assets and text were not redistributed. Independent parent-owned review and instructor live rehearsal are separate delivery gates.</aside>
+    </section>
+  </main>
+  <nav class="controls" aria-label="Presentation controls">
+    <button id="previous" type="button" aria-label="Previous slide">Previous</button>
+    <span id="counter" class="counter" role="status" aria-live="polite"></span>
+    <button id="next" type="button" aria-label="Next slide">Next</button>
+    <select id="jump" aria-label="Jump to slide"></select>
+    <button id="overview" type="button" aria-pressed="false">All slides</button>
+    <button id="notes" type="button" aria-pressed="false">Notes</button>
+    <button id="theme" type="button" aria-label="Toggle light and dark theme">Theme</button>
+    <span class="hint">Arrows &middot; Home/End &middot; N notes &middot; A all</span>
+  </nav>
+  <script>
+    (() => {
+      document.documentElement.classList.add("js");
+      const slides = [...document.querySelectorAll(".slide")];
+      const jump = document.getElementById("jump");
+      const counter = document.getElementById("counter");
+      const previous = document.getElementById("previous");
+      const next = document.getElementById("next");
+      const overview = document.getElementById("overview");
+      const notes = document.getElementById("notes");
+      let index = 0;
+
+      slides.forEach((slide, position) => {
+        const option = document.createElement("option");
+        option.value = String(position);
+        option.textContent = `${position + 1}. ${slide.dataset.title}`;
+        jump.append(option);
+      });
+
+      function show(position, updateHash = true) {
+        index = Math.max(0, Math.min(slides.length - 1, position));
+        slides.forEach((slide, current) => {
+          slide.classList.toggle("active", current === index);
+        });
+        jump.value = String(index);
+        counter.textContent = `${index + 1} / ${slides.length}`;
+        previous.disabled = index === 0;
+        next.disabled = index === slides.length - 1;
+        if (updateHash) {
+          history.replaceState(null, "", `#${slides[index].id}`);
+        }
+        if (!document.documentElement.classList.contains("all")) {
+          window.scrollTo(0, 0);
+        }
+      }
+
+      function fromHash() {
+        const found = slides.findIndex(slide => `#${slide.id}` === window.location.hash);
+        show(found < 0 ? 0 : found, false);
+      }
+
+      function toggle(button, className) {
+        const enabled = document.documentElement.classList.toggle(className);
+        button.setAttribute("aria-pressed", String(enabled));
+        if (className === "all" && !enabled) {
+          show(index);
+        }
+      }
+
+      previous.addEventListener("click", () => show(index - 1));
+      next.addEventListener("click", () => show(index + 1));
+      jump.addEventListener("change", () => show(Number(jump.value)));
+      overview.addEventListener("click", () => toggle(overview, "all"));
+      notes.addEventListener("click", () => toggle(notes, "show-notes"));
+      document.getElementById("theme").addEventListener("click", () => {
+        const current = document.documentElement.getAttribute("data-theme");
+        document.documentElement.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+      });
+      window.addEventListener("hashchange", fromHash);
+      window.addEventListener("keydown", event => {
+        if (event.altKey || event.ctrlKey || event.metaKey ||
+            event.target.closest("input, textarea, select, button, a")) {
+          return;
+        }
+        if (event.key === "ArrowRight" || event.key === "PageDown") {
+          event.preventDefault();
+          show(index + 1);
+        } else if (event.key === "ArrowLeft" || event.key === "PageUp") {
+          event.preventDefault();
+          show(index - 1);
+        } else if (event.key === "Home") {
+          event.preventDefault();
+          show(0);
+        } else if (event.key === "End") {
+          event.preventDefault();
+          show(slides.length - 1);
+        } else if (event.key.toLowerCase() === "n") {
+          toggle(notes, "show-notes");
+        } else if (event.key.toLowerCase() === "a") {
+          toggle(overview, "all");
+        }
+      });
+      fromHash();
+    })();
+  </script>
+</body>
+</html>

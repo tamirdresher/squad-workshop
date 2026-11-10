@@ -1,5 +1,7 @@
 # Squad Workshop — Review & Improvement Plan
 
+> **Historical May 2026 audit.** Current upstream is [github/squad](https://github.com/github/squad), with [official docs](https://github.github.com/squad/). Historical probe results below refer to then-current repository names, not fresh checks. Actionable source links were refreshed on 2026-11-10; use the [AI NEXT guide](../ai-next/instructor.md) for current delivery.
+
 > **Document type:** Independent re-audit + implementation plan (second pass)
 > **Review date:** 2026-05-27
 > **Reviewer:** Claude (independent re-audit, no shared context with the prior review)
@@ -61,7 +63,7 @@ This re-audit surfaces **2 bugs**, **3 inconsistencies**, **5 gaps**, and **4 fo
 
 **Two HIGH-severity bugs to fix before the next learner runs the workshop:**
 
-1. **W-001** — The GitHub URL `https://github.com/bradygaster/squad-cli` returns **404** (confirmed by HTTP probe). The npm package is correctly named `@bradygaster/squad-cli`, but the source repo on GitHub is `bradygaster/squad`. Two user-visible places point to the broken URL: the "Squad CLI issues" contact link in the new-issue chooser ([.github/ISSUE_TEMPLATE/config.yml](../../.github/ISSUE_TEMPLATE/config.yml)) and the "where to file Squad CLI bugs" link in [CONTRIBUTING.md](../../CONTRIBUTING.md). Modules and troubleshooting already point to the correct repo, so learners get conflicting destinations depending on entry point.
+1. **W-001 (historical)** — The old GitHub source name `bradygaster/squad-cli` returned **404** in the May probe; the then-used `bradygaster/squad` source is now a fork. The npm package is still `@bradygaster/squad-cli`, but current canonical source is [github/squad](https://github.com/github/squad). The historical report identified conflicting destinations in the new-issue chooser ([.github/ISSUE_TEMPLATE/config.yml](../../.github/ISSUE_TEMPLATE/config.yml)) and [CONTRIBUTING.md](../../CONTRIBUTING.md); both now target canonical upstream.
 
 2. **W-002** — The README tells learners to run `copilot --agent squad-coach` from inside `reading-list-squad-lab/`, but the agent file lives in the **workshop** repo at [.github/agents/squad-coach.agent.md](../../.github/agents/squad-coach.agent.md). Copilot CLI discovers agents from the current workspace's `.github/agents/`, so the documented invocation will fail with "agent not found" — and the documented affordance ("use the coach when stuck") silently breaks.
 
@@ -99,7 +101,7 @@ Cross-checks performed:
 
 1. Repo-wide grep for `.NET 9`, `SDK.9`, `net9` — confirmed all references in active files are gone (only `docs/done/*.md` and `docs/SQUAD-WORKSHOP-STANDALONE-PLAN.md` retain historical mentions, which is acceptable).
 2. Repo-wide grep for `squad watch`, `squad status`, `squad triage` to verify command-name consistency between modules and troubleshooting.
-3. HTTP probe of `https://github.com/bradygaster/squad-cli` vs. `https://github.com/bradygaster/squad` (results: 404 / 200).
+3. Historical HTTP probe of source names `bradygaster/squad-cli` vs. `bradygaster/squad` (then-observed results: 404 / 200; not current canonical-source verification).
 4. Discoverability trace for `squad-coach` agent and the two `.prompt.md` files against documented invocation contexts.
 5. Spot-check of internal markdown links across module footers and the README "Getting help" section.
 6. Verify-Prerequisites.ps1 logic re-read end-to-end — version thresholds, exit code, output format.
@@ -135,18 +137,18 @@ To balance the findings below — the following should be preserved as-is:
 - [.github/ISSUE_TEMPLATE/config.yml:7](../../.github/ISSUE_TEMPLATE/config.yml)
 - [CONTRIBUTING.md:89](../../CONTRIBUTING.md)
 
-**Symptom:** The "Squad CLI issues" contact in the new-issue chooser, and the "where to file Squad CLI bugs" line in CONTRIBUTING.md, both link to `https://github.com/bradygaster/squad-cli`.
+**Historical symptom:** The "Squad CLI issues" contact in the new-issue chooser, and the "where to file Squad CLI bugs" line in CONTRIBUTING.md, both linked to the invalid GitHub source name `bradygaster/squad-cli`.
 
 **Why it fails:** The npm package is `@bradygaster/squad-cli`, but the GitHub source repository is `bradygaster/squad`. HTTP probe confirms:
 
 | URL | Status |
 |---|---|
-| `https://github.com/bradygaster/squad-cli` | 404 |
-| `https://github.com/bradygaster/squad` | 200 |
+| historical source name `bradygaster/squad-cli` | 404 |
+| historical source name `bradygaster/squad` (now a fork) | 200 |
 
 Modules and troubleshooting correctly link to `bradygaster/squad` (via specific issue numbers like #992, #1017, #1026, #1052, #1062, #1081 and the open-issues link at the bottom of Module 3). So learners get conflicting destinations: file-an-issue flow → 404; in-content links → real repo.
 
-**Fix:** Change both occurrences to `https://github.com/bradygaster/squad`. Keep the prose phrasing `@bradygaster/squad-cli` where it refers to the npm package — that's correct.
+**Current fix:** Change both occurrences to `https://github.com/github/squad`. Keep the prose phrasing `@bradygaster/squad-cli` where it refers to the npm package — that's correct. This supersedes the May fix to the former source, now a fork.
 
 ---
 
@@ -427,22 +429,22 @@ Fixes are ordered by risk and dependency. Phase A must be done before publishing
 Current:
 ```yaml
   - name: Squad CLI issues
-    url: https://github.com/bradygaster/squad-cli
+    url: HISTORICAL_INVALID_SOURCE_URL
     about: Bugs in Squad itself (not the workshop content) go to the Squad CLI repo.
 ```
 
-Replace `url` value with `https://github.com/bradygaster/squad`.
+For current upstream, replace `url` value with `https://github.com/github/squad`.
 
 **File 2:** `CONTRIBUTING.md`
 
 Current (line 89):
 ```markdown
-- **Squad CLI bugs** — those go to [@bradygaster/squad-cli](https://github.com/bradygaster/squad-cli)
+- **Squad CLI bugs** — historical invalid example linked the npm package name as though it were a GitHub repository
 ```
 
 Replace with:
 ```markdown
-- **Squad CLI bugs** — those go to [bradygaster/squad](https://github.com/bradygaster/squad) (the npm package is `@bradygaster/squad-cli`; the source repo is `bradygaster/squad`)
+- **Squad CLI bugs** — those go to [github/squad](https://github.com/github/squad) (the npm package is `@bradygaster/squad-cli`; the canonical source repo is `github/squad`)
 ```
 
 Leave all `@bradygaster/squad-cli` *package* references untouched in:
@@ -891,7 +893,7 @@ Must show all PASS, summary `0 failed`.
 **E-2. Confirm the 404 is gone:**
 ```powershell
 # These must both return 200:
-(Invoke-WebRequest -Uri https://github.com/bradygaster/squad -Method Head).StatusCode
+(Invoke-WebRequest -Uri https://github.com/github/squad -Method Head).StatusCode
 # The 404 URL must no longer appear anywhere in tracked content:
 Select-String -Path README.md,CONTRIBUTING.md,.github\**\*.* -Pattern "bradygaster/squad-cli"
 # (npm package mentions are fine; only the GitHub URL should be gone)

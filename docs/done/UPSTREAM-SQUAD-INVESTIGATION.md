@@ -1,9 +1,11 @@
 # Upstream Squad Repository Investigation
 
+> **Historical investigation.** Current upstream is [github/squad](https://github.com/github/squad). Documentation navigation below was refreshed on 2026-11-10; May findings and issue numbers have not been revalidated for 1.1.0. Use the [AI NEXT provenance record](../ai-next/upstream-and-provenance.md) for current evidence.
+
 > Assessment of `bradygaster/squad` — learning resources, agent files, Ralph capabilities and limitations, and current open issues relevant to this workshop.
 >
 > **Investigated:** May 2026 — Squad CLI v0.9.4 (main branch)  
-> **Official docs site:** https://bradygaster.github.io/squad/  
+> **Current official docs site:** https://github.github.com/squad/
 > **Status:** ✅ COMPLETE — findings applied to `docs/troubleshooting.md` and all three modules. Archived to `docs/done/`.
 
 ---
@@ -26,7 +28,7 @@
 
 ### What exists
 
-The upstream repo has a **full Astro-based documentation site** under `docs/`. The content lives at `docs/src/content/docs/` and is published at https://bradygaster.github.io/squad/.
+The investigated repo had a **full Astro-based documentation site** under `docs/`, with content at `docs/src/content/docs/`. Current official documentation is published at https://github.github.com/squad/.
 
 **Guide section** (`docs/src/content/docs/guide/`):
 
@@ -313,12 +315,12 @@ These official docs pages should be linked from the workshop as "want to learn m
 
 | Upstream resource | URL | Add to |
 |-------------------|-----|--------|
-| Main guide | https://bradygaster.github.io/squad/docs/guide | Module 1 closing section |
-| Sample prompts | https://bradygaster.github.io/squad/docs/sample-prompts | Module 1 Step 10 (giving prompts to the team) |
-| Cookbook / recipes | https://bradygaster.github.io/squad/docs/cookbook/recipes | Module 2 intro |
-| Build autonomous agent | https://bradygaster.github.io/squad/docs/guide/build-autonomous-agent | Module 3 opening |
-| FAQ | https://bradygaster.github.io/squad/docs/guide/faq | docs/troubleshooting.md |
-| Building resilient agents | https://bradygaster.github.io/squad/docs/guide/building-resilient-agents | Module 3 |
+| Main guide | https://github.github.com/squad/docs/guide | Module 1 closing section |
+| Sample prompts | https://github.github.com/squad/docs/sample-prompts | Module 1 Step 10 (giving prompts to the team) |
+| Cookbook / recipes | https://github.github.com/squad/docs/cookbook/recipes | Module 2 intro |
+| Build autonomous agent | https://github.github.com/squad/docs/guide/build-autonomous-agent | Module 3 opening |
+| FAQ | https://github.github.com/squad/docs/guide/faq | docs/troubleshooting.md |
+| Building resilient agents | https://github.github.com/squad/docs/guide/building-resilient-agents | Module 3 |
 
 ### Patterns to adopt from upstream issues
 
@@ -344,7 +346,7 @@ The upstream repo has only one agent file: the coordinator (`squad.agent.md`). I
 
 | Category | Finding | Action for Workshop |
 |----------|---------|-------------------|
-| **Learning resources** | No upstream workshop exists. Comprehensive reference docs at bradygaster.github.io/squad | Link to sample-prompts, cookbook, FAQ from modules |
+| **Learning resources** | Historical report found no upstream workshop. Current reference docs: github.github.com/squad | Link to sample-prompts, cookbook, FAQ from modules |
 | **Agent files** | Only `squad.agent.md` (coordinator, 92KB). No other agents upstream | Workshop's squad-coach.agent.md is unique; no conflicts |
 | **Ralph — triage** | Works well. Reads GitHub Issues, labels, assigns | Module 3 Step 11 is accurate |
 | **Ralph — loop** | Works well for recurring housekeeping | Document ralph-stop mechanism clearly ✓ |

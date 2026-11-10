@@ -1,5 +1,7 @@
 # Earlier Workshop Review & Adoption Plan
 
+> **Historical May 2026 proposal, not the current delivery runbook.** Current upstream is [github/squad](https://github.com/github/squad), with [official docs](https://github.github.com/squad/). Fork issue numbers below are retained as historical identifiers, not mapped current issues. Use the [AI NEXT guide](ai-next/instructor.md) for the current course.
+
 > **Document type:** External-workshop analysis + adoption proposal
 > **Review date:** 2026-05-28
 > **Reviewer:** Claude
@@ -304,7 +306,7 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **Teaching value?** High. This is the artifact a learner would print out and tape next to their monitor. It's also the most reusable piece of the workshop — usable on any future Squad project, not just the Reading List app.
 
-**Verdict:** **ADOPT** — see [§5.5](#55-t-005--quick-reference-cheat-sheet) (new appendix at the end of [README.md](../README.md) or a new [docs/cheat-sheet.md](cheat-sheet.md)).
+**Verdict:** **ADOPT** — see [§5.5](#55-t-005--quick-reference-cheat-sheet) (new appendix at the end of [README.md](../README.md) or a proposed `docs/cheat-sheet.md`, not present in this course).
 
 ---
 
@@ -316,7 +318,7 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **We have it?** No. Our [modules/03-advanced.md](../modules/03-advanced.md) covers Ralph as the "autonomous" tier but never mentions `@copilot`. The two are complementary: Ralph is the *router*; `@copilot` is one of the *workers* he can route to.
 
-**Teaching value?** Medium-high. Without this, learners think the only autonomous option is Ralph spawning a fresh Copilot session — which is `--execute` with the known specialist limitation ([issue #1081](https://github.com/bradygaster/squad/issues/1081)). `@copilot` is the alternative path: properly bounded autonomous work on small, labeled issues.
+**Teaching value?** Medium-high. Without this, learners think the only autonomous option is Ralph spawning a fresh Copilot session — which is `--execute` with the historically reported specialist limitation (fork issue #1081; current status must be checked in [github/squad issues](https://github.com/github/squad/issues)). `@copilot` is the alternative path: properly bounded autonomous work on small, labeled issues.
 
 **Verdict:** **ADOPT** — see [§5.6](#56-t-006--copilot-coding-agent-as-a-team-member) (new Module 3 Step 11.5b or 12.5: "Add `@copilot` to your team — the bounded-autonomy alternative").
 
@@ -719,7 +721,7 @@ After the manual trigger:
 
 ### Stay in `--once` (no `--execute`)
 
-This workflow runs `squad triage --once`, **not** `--execute`. Triage-only is the safe tier: Ralph labels and comments, but does not write code. Adding `--execute` to a scheduled workflow would mean autonomous agents spawning PRs while you sleep — possible, but with all the [#1081 specialist-charter caveats](https://github.com/bradygaster/squad/issues/1081) from Step 11d, and a much harder failure mode to debug.
+This historical workflow runs `squad triage --once`, **not** `--execute`. Triage-only still mutates issue labels/comments. Adding `--execute` would also spawn coding sessions, with the historical fork issue #1081 specialist-charter caveats from Step 11d and a harder failure mode to debug. Recheck [current upstream issues](https://github.com/github/squad/issues) before any separately approved exercise; neither mode runs in the AI NEXT core class.
 
 **Rule of thumb:** start with `--once`, run it for a week, and only consider adding `--execute` if the triage labels Ralph applies are consistently right.
 
@@ -750,7 +752,7 @@ GitHub-hosted runners are free for public repos and have a 2,000-minutes/month a
 **Target placement:** Two touchpoints.
 
 1. A new **brief** subsection in Module 1 Step 1, right after the existing model-selection block — explaining that the model picked there is the *session* model, and that per-agent tiers exist.
-2. A new "Cost and model tiers" reference section in [docs/prerequisites.md](prerequisites.md) (or a new [docs/budget-and-models.md](budget-and-models.md)) with the full tier table.
+2. A new "Cost and model tiers" reference section in [docs/prerequisites.md](prerequisites.md) (or a proposed `docs/budget-and-models.md`, not present in this course) with the full tier table.
 
 **Proposed copy — Module 1 Step 1 addition (after line 191):**
 
@@ -767,7 +769,7 @@ If you run out of budget mid-workshop or notice Ralph burning premium requests o
 > **Workshop default:** for Modules 1 and 2, the single-session-model choice above is enough. Tier optimization matters more once you point Ralph at a real backlog (Module 3).
 ```
 
-**Proposed new file [docs/budget-and-models.md](budget-and-models.md):**
+**Proposed new file `docs/budget-and-models.md` (not present in this course):**
 
 ```markdown
 # Budget and model tiers
@@ -862,7 +864,7 @@ Apply the same pattern to Steps 11, 11.5 (new from T-002), 12. Two-line "Try if 
 
 **Goal:** Give learners a portable, post-workshop cheat sheet of the prompt patterns they've learned.
 
-**Target placement:** New file [docs/cheat-sheet.md](cheat-sheet.md), linked from the README's "Getting help" section.
+**Target placement:** Proposed file `docs/cheat-sheet.md` (not present in this course), to be linked from the README's "Getting help" section.
 
 **Proposed new file content:**
 
@@ -943,7 +945,7 @@ Apply the same pattern to Steps 11, 11.5 (new from T-002), 12. Two-line "Try if 
 
 ## Step 11.6: Add `@copilot` to your team (optional)
 
-GitHub's `@copilot` agent — distinct from your `copilot --agent squad` session — can join your Squad as a team member that autonomously claims labeled issues and opens PRs. This is the *bounded-autonomy alternative* to Ralph `--execute`: instead of Ralph spawning a generic Copilot session ([issue #1081](https://github.com/bradygaster/squad/issues/1081)), `@copilot` runs in GitHub's infrastructure with its own well-defined capability profile.
+GitHub's `@copilot` agent — distinct from your `copilot --agent squad` session — was proposed here as a team member that claims labeled issues and opens PRs. This was the *bounded-autonomy alternative* to Ralph `--execute` and its historically reported generic-session limitation (fork issue #1081). Consult [current upstream issues](https://github.com/github/squad/issues) and current capability/policy requirements before adopting this proposal.
 
 ### When `@copilot` is a good fit
 
@@ -1154,7 +1156,7 @@ Proposed:
 
 **Why one file, not a folder:** the six topics are small individually (~80-200 lines each). One file is easier to skim, easier to link to specific sections via anchors, and easier to maintain (one open-issue queue, not six). A learner opening this on a flight reads top-to-bottom; one with a specific need uses Ctrl-F or the TOC.
 
-**Target placement:** [modules/04-bonus.md](../modules/04-bonus.md) — sits next to `01-basic.md`, `02-intermediate.md`, `03-advanced.md` in the modules folder. Discoverable from the README modules table as a fourth row with `Optional / Bonus` in the time column.
+**Target placement:** Proposed `modules/04-bonus.md` (not present in this course) — would sit next to `01-basic.md`, `02-intermediate.md`, `03-advanced.md` in the modules folder. The proposal adds it to the README modules table as a fourth row with `Optional / Bonus` in the time column.
 
 **Proposed file structure:**
 
@@ -1429,7 +1431,7 @@ For the record — these are explicitly **not** being adopted, with brief reason
 | **T-017 — Tamir's `ralph-watch.ps1` script** | Wraps `gh copilot` directly with a baked-in prompt — fragile to upstream changes; reimplements features Squad CLI provides natively. Better as a future upstream feature request to `bradygaster/squad` than as workshop content. |
 | **T-018 — Webhook architecture diagram** | Enterprise ops topic. Doesn't fit even as bonus content — the bonus section B3 covers the *intent* at a useful level; the full webhook plumbing is too implementation-specific to teach. |
 
-T-012 through T-016 were previously listed here as REJECT. They are now BONUS — folded into [modules/04-bonus.md](../modules/04-bonus.md) (sections B1-B5 in [§5.9](#59-bonus-content--modules04-bonusmd)).
+T-012 through T-016 were previously listed here as REJECT. This proposal reclassified them as BONUS for a proposed `modules/04-bonus.md` (not present in this course; sections B1-B5 in [§5.9](#59-bonus-content--modules04-bonusmd)).
 
 ---
 
