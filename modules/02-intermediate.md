@@ -1,12 +1,21 @@
 # Module 2 — Intermediate: Compound the Memory and Inspect the Artifacts
 
-<!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
-
-> **Retained extended route, historical Squad 0.9.4 baseline.** Use the [AI NEXT learner lab](../docs/ai-next/learner-lab.md) for the bounded three-hour class. Its current course has a local review/evidence gate and requires no push or public repository.
-
 > The point of this module: see whether the second feature goes faster because the repo *remembers*, or whether the team retraces the same steps. Then look inside `.squad/` and judge for yourself.
 
 ← Back to [Workshop Index](../README.md) · [← Module 1 (Basic)](01-basic.md)
+
+---
+
+## At a glance
+
+**⏱️ ~45 min** · add a second feature and test whether the repo's memory compounds.
+
+| Step | What you do |
+|---|---|
+| 7 | Add a second-wave feature |
+| 8 | Commit and push |
+| 9 | Look inside `.squad/` and judge the artifacts |
+| 9.5 | Install a skill and watch the team use it (optional) |
 
 ---
 
@@ -75,29 +84,46 @@ Before celebrating, inspect the team's artifacts. Open each file and evaluate wh
 
 ```powershell
 # Decisions — were they useful?
-Get-Content .squad\decisions.md
+Get-Content .squad/decisions.md
 
 # Routing — does it reflect the actual team?
-Get-Content .squad\routing.md
+Get-Content .squad/routing.md
 
 # Team — who's on it?
-Get-Content .squad\team.md
+Get-Content .squad/team.md
 
 # Skills — did anything get captured?
-Get-ChildItem -Recurse .copilot\skills\
+if (Test-Path .github/skills) {
+    Get-ChildItem -Recurse .github/skills/
+} elseif (Test-Path .copilot/skills) {
+    Get-ChildItem -Recurse .copilot/skills/
+} else {
+    Write-Host "No repo-level skills directory found."
+}
 
 # Agent histories — did they learn?
-Get-ChildItem .squad\agents\ -Recurse -Include history.md | ForEach-Object {
+Get-ChildItem .squad/agents/ -Recurse -Include history.md | ForEach-Object {
     Write-Host "`n=== $($_.FullName) ===" -ForegroundColor Yellow
     Get-Content $_
 }
 
 # Identity — current focus and wisdom
-Get-Content .squad\identity\now.md
-Get-Content .squad\identity\wisdom.md
+Get-Content .squad/identity/now.md
+Get-Content .squad/identity/wisdom.md
 ```
 
 **The honest test:** for each file, ask "would I write this if I were taking notes for myself?" If yes, the team is doing real work. If the files read like AI-generated meeting minutes nobody will ever consult again, you learned something equally valuable.
+
+### PM artifact review rubric
+
+If you are taking the PM path, inspect artifacts through these questions:
+
+- Does `.squad/decisions.md` explain product tradeoffs, not just implementation detail?
+- Did the Tester map tests back to acceptance criteria?
+- Does the Scribe preserve enough context for a future PM to understand why the team made each choice?
+- Can you verify the feature behavior through the UI without reading code?
+
+Engineers can go deeper into test code and implementation. PMs should focus on behavior, risks, decisions, and acceptance criteria.
 
 ### What "good" looks like
 
@@ -117,11 +143,87 @@ Either outcome is data. The point of inspecting is to know which one you're gett
 
 ---
 
+## Step 9.5: Skills — extend what the team knows (optional)
+
+Squad agents draw on **skills** — small, portable markdown modules (sometimes with scripts) that encode reusable knowledge: review protocols, test discipline, error recovery, git conventions. On current releases, `squad init` installs the curated set into `.github/skills/` so every Copilot surface can see them. Older repos may still have `.copilot/skills/`. This step makes them visible and asks the only question that matters — do they actually change behavior?
+
+### 9.5a. See what's installed
+
+```powershell
+if (Test-Path .github/skills) {
+    Get-ChildItem .github/skills/
+} else {
+    Get-ChildItem .copilot/skills/
+}
+```
+
+You should see directories such as `squad-conventions`, `reviewer-protocol`, `test-discipline`, `error-recovery`, `git-workflow`, `secret-handling`, `session-recovery`, and `agent-collaboration`. Each is a skill any agent can read and apply.
+
+> **Version quirk to know:** v0.11 moved bundled skills from `.copilot/skills/` to `.github/skills/`. If you're inspecting an older lab repo or migrated team, check both locations before assuming a skill is missing.
+
+### 9.5b. Read one — is it real guidance or boilerplate?
+
+```powershell
+$skillPath = if (Test-Path .github/skills/reviewer-protocol/SKILL.md) {
+    ".github/skills/reviewer-protocol/SKILL.md"
+} else {
+    ".copilot/skills/reviewer-protocol/SKILL.md"
+}
+Get-Content $skillPath
+```
+
+Read it as if you were the Lead agent about to do a review. Would you actually want this applied — or is it generic filler?
+
+### 9.5c. Put it to the test
+
+Ask the team to do something the skill governs, and watch whether its guidance surfaces:
+
+```
+Lead, do a focused review of the filter + validation changes from Step 7, following our reviewer protocol. Call out the specific checks you applied.
+```
+
+**The honest test:** did the review visibly apply the protocol's checks (or get noticeably more rigorous), or did it review exactly as it would have anyway? If the skill changed nothing observable, it's decoration — note that. If it sharpened the output, you've found a real lever for real work.
+
+### 9.5d. (Optional) Pull in an external skill
+
+The community publishes skills in the APM (`owner/repo`) format. You can add one with:
+
+```powershell
+squad skill install <owner>/<repo>/<skill-name>
+```
+
+Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so vendor or fork it if you come to depend on it. In current workshop runs, bundled skills live under `.github/skills/`; if you install extras, verify the destination path the CLI prints and inspect that folder directly.
+
+---
+
+### 9.6. (Optional) Choose where state lives — the two-layer backend
+
+Everything you built in this module — decisions, agent history, session logs — lives under `.squad/` as plain files on your working branch. That's the **local** backend: simple, visible, and the right default for a solo workshop repo. It has one well-known failure mode at team scale: when several people (or worktrees, or Ralph running autonomously) write `.squad/` state on different branches, those files collide and you get merge conflicts in your *memory*.
+
+The **two-layer** backend fixes that by splitting state across two git-native layers that never touch your feature branch:
+
+- **Git notes** — commit-scoped annotations that ride along with the code they describe, out of the working tree.
+- **An orphan branch** — a dedicated, out-of-line branch that holds durable decisions and history, so it never conflicts with feature-branch code.
+
+Configure it fresh at init, or migrate this lab to it:
+
+```powershell
+squad init --state-backend two-layer      # new repos
+squad upgrade --state-backend two-layer    # migrate an existing squad
+```
+
+You don't need this for a single-person workshop repo — local is fine here. Reach for two-layer the moment more than one writer touches the same repo's state. Background reading:
+
+- [Scaling AI agents, Part 7 — Enterprise state](https://www.tamirdresher.com/blog/2026/03/22/scaling-ai-part7-enterprise-state) — why file-on-branch state breaks at team scale
+- [Scaling AI agents, Part 7b — Git notes](https://www.tamirdresher.com/blog/2026/03/23/scaling-ai-part7b-git-notes) — how the git-notes layer works under the hood
+
+---
+
 ## You can stop here
 
 Modules 1 and 2 together are a complete, honest evaluation of Squad's core value proposition: a repo-native team that builds, decides, and remembers. If the artifacts in step 9 are useful, you have your answer.
 
-If you want to see the riskier corners — observability with .NET Aspire, and Squad's autonomous mode (Ralph) — continue to **[Module 3 — Advanced](03-advanced.md)**. That module is more "guided tour of optional capabilities" than "build something." Treat it accordingly.
+If you want to see the riskier corner — Squad's autonomous mode (Ralph) — continue to **[Module 3 — Advanced](03-advanced.md)**. That module is more "guided tour of optional capabilities" than "build something." Treat it accordingly.
 
 ---
 
@@ -129,7 +231,7 @@ If you want to see the riskier corners — observability with .NET Aspire, and S
 
 - [Squad cookbook — recipes](https://github.github.com/squad/docs/cookbook/recipes) — practical patterns for common Squad workflows
 - [Building resilient agents](https://github.github.com/squad/docs/guide/building-resilient-agents) — handling failure, retries, and partial work
-- [Current upstream issues](https://github.com/github/squad/issues) — investigate context-budget behavior here; historical fork issue #1037 has not been mapped to a current issue
+- [Context budget optimization](https://github.com/bradygaster/squad/issues/1037) — historical issue reference: how `.squad/` memory grows and what to do when it bloats
 
 ---
 

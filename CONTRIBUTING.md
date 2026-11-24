@@ -1,7 +1,5 @@
 # Contributing to Squad Workshop
 
-<!-- Modified for the AI NEXT course refresh on 2026-11-10; original attribution retained. -->
-
 Thanks for helping improve this workshop. Contributions fall into a few categories — each has its own lightweight process.
 
 ---
@@ -13,7 +11,7 @@ If a step in a module doesn't work — wrong command, changed tool API, version 
 The template asks for:
 - Which module and step failed
 - What happened (exact command + output)
-- Your tool versions (paste `.\scripts\Verify-Prerequisites.ps1` output)
+- Your tool versions (paste `./scripts/Verify-Prerequisites.ps1` output)
 - OS and terminal
 
 A broken-step issue with tool versions is almost always fixable within a day. A vague "step 4 doesn't work" report is not.
@@ -25,14 +23,14 @@ A broken-step issue with tool versions is almost always fixable within a day. A 
 Small fixes — typos, broken links, wrong expected output — are welcome as direct PRs. No issue needed.
 
 Before opening a PR:
-- Run `.\scripts\Verify-Prerequisites.ps1` on the step you're fixing (even if it's prose) to confirm the surrounding context is still accurate.
+- Run `./scripts/Verify-Prerequisites.ps1` on the step you're fixing (even if it's prose) to confirm the surrounding context is still accurate.
 - Confirm all markdown links in the file you edited still resolve.
 
 ---
 
 ## Updating for a new tool version
 
-When Squad CLI, GitHub Copilot CLI, or any other tool releases a version that changes workshop steps:
+When Squad CLI or any other tool releases a version that changes workshop steps:
 
 1. Open a **Broken step** issue first describing what changed.
 2. If you can fix it, reference the issue in your PR and update:
@@ -88,12 +86,11 @@ Before requesting review:
 ## What this repo is not
 
 Please don't open issues or PRs for:
-- **Squad CLI bugs** — those go to [github/squad](https://github.com/github/squad) (the npm package remains `@bradygaster/squad-cli`; `bradygaster/squad` is a fork, not the canonical upstream)
-- **GitHub Copilot CLI issues** — those go to GitHub support
+- **Squad CLI bugs** — those go to [github/squad](https://github.com/github/squad) (the npm package is `@bradygaster/squad-cli`; the source repo is `github/squad`)
 - Feature requests for Squad itself — this repo documents Squad, it doesn't build it
 
 ---
 
 ## License
 
-By contributing to this workshop, you agree that your contributions will be licensed under the same [Apache License 2.0](LICENSE) as the rest of the repository. You confirm that you have the right to submit the work under this license.
+By contributing to this workshop, you agree that your contributions will be licensed under the same [MIT License](LICENSE) as the rest of the repository. You confirm that you have the right to submit the work under this license.
