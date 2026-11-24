@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Common failure patterns across all three modules, with exact error text and fixes.
+Common failure patterns across all modules, with exact error text and fixes.
 
 ---
 
@@ -30,9 +30,9 @@ Restart your terminal and retry.
 
 **Symptom:** `copilot: The term 'copilot' is not recognized...`
 
-**Cause:** The installer updated PATH but the current terminal session doesn't see it yet.
+**Cause:** npm's global bin directory isn't on PATH in the current terminal session yet.
 
-**Fix:** Close and reopen your terminal (PowerShell 7+ required — the installer adds it if missing). If it still fails:
+**Fix:** Close and reopen your terminal. If it still fails:
 
 ```powershell
 # Confirm where it installed to:
@@ -74,7 +74,7 @@ Re-run `squad doctor` — you should see `9 passed, 0 failed, 0 warnings, 2 info
 **Fix:**
 
 ```powershell
-gh auth login
+gh auth login -s project
 ```
 
 Select `GitHub.com` → `HTTPS` → authenticate via browser. Then verify:
@@ -87,52 +87,21 @@ Should show `✓ Logged in to github.com account <your-username>`.
 
 ---
 
-## Module 3 — Aspire and Ralph
-
-### `squad aspire` shows `✓` but dashboard is empty or unreachable
-
-**Symptom:** The command prints `✓ Aspire dashboard launching` but `http://localhost:18888` returns a connection error.
-
-**Cause:** Docker Desktop is not running. The `✓` line is printed even when Docker fails — it's a known gotcha in the current Squad version.
-
-**Fix:**
-
-1. Stop the command (`Ctrl+C`)
-2. Start Docker Desktop from the Start menu
-3. Wait for the whale icon to stop animating
-4. Confirm Docker is healthy:
-   ```powershell
-   docker info | Select-String "Server Version"
-   ```
-5. Re-run `squad aspire`
-
----
-
-### Aspire dashboard stays empty during a Squad session
-
-**Symptom:** You're running `copilot --agent squad` and the agents are clearly doing work, but the Aspire dashboard at `http://localhost:18888` shows no traces.
-
-**Possible causes:**
-
-1. **Aspire wasn't actually running** — see above.
-2. **Squad version too old** — v0.9.0+ auto-wires OpenTelemetry. If you're on an older version, run `squad upgrade` and restart the session.
-3. **Firewall blocking `localhost:4317`** — Windows Firewall may block the OTLP gRPC port. Allow it once for the session.
-
----
+## Module 3 — Ralph
 
 ### `ralph-stop` file blocks the next Ralph run
 
-**Symptom:** `squad triage` or `squad loop` exits immediately on the next run with a message about a stop file.
+**Symptom:** `squad watch` or `squad loop` exits immediately on the next run with a message about a stop file.
 
 **Cause:** You stopped Ralph cleanly last time by creating `.squad/ralph-stop`, and the file wasn't deleted.
 
 **Fix:**
 
 ```powershell
-Remove-Item .squad\ralph-stop -ErrorAction SilentlyContinue
+Remove-Item .squad/ralph-stop -ErrorAction SilentlyContinue
 ```
 
-Then re-run your `squad triage` or `squad loop` command.
+Then re-run your `squad watch` or `squad loop` command.
 
 ---
 
@@ -143,7 +112,7 @@ Then re-run your `squad triage` or `squad loop` command.
 **Fix:**
 
 ```powershell
-gh auth login
+gh auth login -s project
 gh auth status   # confirm it shows logged in
 ```
 
@@ -153,6 +122,21 @@ Then wait for Ralph's next round (or restart with a fresh triage run).
 
 ## General
 
+### `.squad/` gets noisy or too large
+
+**Symptom:** Decisions, histories, logs, or inbox files are growing, and agents start carrying too much old context.
+
+**Fix:** Preview cleanup first, then run the normal cleanup:
+
+```powershell
+squad nap --dry-run
+squad nap
+```
+
+Use `squad nap --deep --dry-run` only when a facilitator explicitly wants a more aggressive archive/prune pass.
+
+---
+
 ### The team retraces steps it should already know
 
 **Symptom:** In Module 2, the agents re-explain or re-propose things that were decided in Module 1 (storage choice, folder layout, etc.).
@@ -160,8 +144,8 @@ Then wait for Ralph's next round (or restart with a fresh triage run).
 **This is a data point, not a bug.** It means the Scribe didn't capture the decisions usefully, or the agents aren't reading the memory files. Check:
 
 ```powershell
-Get-Content .squad\decisions.md
-Get-Content .squad\identity\wisdom.md
+Get-Content .squad/decisions.md
+Get-Content .squad/identity/wisdom.md
 ```
 
 If these are thin or generic, the team's memory is decorative. That's valuable information about whether Squad is earning its keep for your use case. See Module 2, Step 9 for the full artifact inspection.
@@ -170,7 +154,7 @@ If these are thin or generic, the team's memory is decorative. That's valuable i
 
 ## Known Squad bugs and workarounds
 
-These are confirmed upstream bugs in Squad CLI that workshop participants may encounter. Check [bradygaster/squad issues](https://github.com/bradygaster/squad/issues) for current status.
+These are historical upstream reports that workshop participants may recognize. Numbered links below retain their original repository URLs so their issue identities remain accurate; they do not establish current 1.1.0+ behavior. Check [github/squad issues](https://github.com/github/squad/issues) for current status.
 
 ---
 
@@ -185,7 +169,7 @@ Error [ERR_MODULE_NOT_FOUND]: Cannot find module
 Did you mean to import "vscode-jsonrpc/node.js"?
 ```
 
-**Cause:** `@github/copilot-sdk` 0.1.32 has a broken import path that fails on Windows. Upstream [issue #1062](https://github.com/bradygaster/squad/issues/1062).
+**Cause:** `@github/copilot-sdk` 0.1.32 had a broken import path that failed on Windows. This was fixed upstream — upgrade to Squad CLI 0.9.4+ to resolve. ([issue #1062](https://github.com/bradygaster/squad/issues/1062) — closed)
 
 **Fix:** Add an override to your lab repo's `package.json` (create one in the root of `reading-list-squad-lab` if it doesn't exist):
 
@@ -205,7 +189,7 @@ Then run `npm install` in the lab repo. This forces the patched version to be us
 
 **Symptom:** Squad stops dispatching to team members. Work gets done inline by the coordinator. Commits go directly to `main` without branch creation or PR workflow. The session "feels like regular Copilot."
 
-**Cause:** The 92KB coordinator file (`squad.agent.md`) was silently dropped from the Copilot context budget due to pressure from a prior long session's summary. When this happens, Squad degrades to vanilla Copilot with no warning and no error message. Upstream [issue #1017](https://github.com/bradygaster/squad/issues/1017).
+**Cause:** The 92KB coordinator file (`squad.agent.md`) was silently dropped from the Copilot context budget due to pressure from a prior long session's summary. When this happens, Squad degrades to vanilla Copilot with no warning and no error message. This was fixed upstream — upgrade to Squad CLI 0.9.4+ to resolve. ([issue #1017](https://github.com/bradygaster/squad/issues/1017) — closed)
 
 **Fix:** Start a completely fresh Copilot CLI session:
 
@@ -237,11 +221,11 @@ Then verify your real changes are still there and commit normally. The `.gitattr
 
 ---
 
-### `squad triage --execute` agents don't behave like the assigned specialist (formerly `squad watch`)
+### `squad watch --execute` agents don't behave like the assigned specialist
 
 **Symptom:** You labeled an issue `squad:backend` (or `squad:bishop`, etc.) and Ralph's `--execute` mode picked it up — but the spawned agent behaves like a generic assistant, not like your Backend agent with its specific charter and personality.
 
-**Cause:** `squad triage --execute` (the command was renamed from `squad watch` upstream) uses the `squad:{member}` label only as a routing filter. When it spawns a Copilot session to work on the issue, it uses a **generic Ralph prompt** — the specialist's charter is never injected into the spawn prompt. Upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081).
+**Cause:** `squad watch --execute` uses the `squad:{member}` label only as a routing filter. When it spawns a Copilot session to work on the issue, it uses a **generic Ralph prompt** — the specialist's charter is never injected into the spawn prompt. This is by design in the current release (upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081) — closed).
 
 **Workaround:** For work that requires specialist quality (code architecture, nuanced review, expert domain knowledge), use interactive mode instead:
 
@@ -252,6 +236,23 @@ copilot --agent squad
 Then ask directly: `Backend agent, implement the feature from issue #42.`
 
 Use `--execute` only for small, well-scoped tasks where specialist nuance doesn't matter much.
+
+---
+
+### `squad watch --monitor-teams` / `--monitor-email` don't work
+
+**Symptom:** You run one of the monitor flags and get no useful intake, or the command complains about missing prerequisites.
+
+**Cause:** The public v0.11 docs mark both capabilities as requiring **a Teams/email MCP bridge**. Without that bridge, Ralph can still watch GitHub issues, but he cannot scan Teams or email.
+
+**Verified commands:**
+
+```powershell
+squad watch --monitor-teams --interval 5
+squad watch --monitor-email --interval 5
+```
+
+**Fix:** Either configure a Teams/email MCP bridge first, or drop back to GitHub-only workflows and remove the monitor flags for this workshop run.
 
 ---
 
@@ -284,7 +285,7 @@ Lane completed with a model rate-limit failure
 **Workaround:** Before running `squad upgrade`, save your customizations:
 
 ```powershell
-Copy-Item .github\agents\squad.agent.md .github\agents\squad.agent.md.backup
+Copy-Item .github/agents/squad.agent.md .github/agents/squad.agent.md.backup
 squad upgrade
 # Then re-apply your changes manually by diffing against the backup
 ```

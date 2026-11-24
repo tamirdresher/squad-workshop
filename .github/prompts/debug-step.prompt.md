@@ -2,7 +2,7 @@
 mode: ask
 description: >
   Help diagnose a stuck or failing workshop step. Paste the step you're on,
-  the command you ran, and the output. Use this when a squad or copilot command
+  the command you ran, and the output. Use this when a squad or Copilot command
   behaves unexpectedly or doesn't match the expected output in the module.
 ---
 

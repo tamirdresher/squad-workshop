@@ -13,6 +13,7 @@ body:
     attributes:
       label: Module
       options:
+        - "0 — Orientation"
         - "1 — Basic"
         - "2 — Intermediate"
         - "3 — Advanced"
@@ -23,7 +24,7 @@ body:
     id: step
     attributes:
       label: Step number or heading
-      placeholder: "e.g. Step 0f — squad doctor, or Step 3 — Make the team explore first"
+      placeholder: "e.g. Module 0 — Orientation, Step 0f — squad doctor, or Step 3 — Make the team explore first"
     validations:
       required: true
 
@@ -63,4 +64,3 @@ body:
     attributes:
       label: Anything else
       description: Workaround you found, related issues, anything else relevant.
-      required: false

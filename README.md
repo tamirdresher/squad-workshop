@@ -1,29 +1,70 @@
 # Squad Workshop
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Check links](https://github.com/joslat/squad-workshop/actions/workflows/check-links.yml/badge.svg)](https://github.com/joslat/squad-workshop/actions/workflows/check-links.yml)
-[![Verify script](https://github.com/joslat/squad-workshop/actions/workflows/verify-script.yml/badge.svg)](https://github.com/joslat/squad-workshop/actions/workflows/verify-script.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Check links](https://github.com/tamirdresher/squad-workshop/actions/workflows/check-links.yml/badge.svg)](https://github.com/tamirdresher/squad-workshop/actions/workflows/check-links.yml)
+[![Verify script](https://github.com/tamirdresher/squad-workshop/actions/workflows/verify-script.yml/badge.svg)](https://github.com/tamirdresher/squad-workshop/actions/workflows/verify-script.yml)
 
-> Workshop: assemble your AI dev team with Squad and ship a full-stack app in minutes.
+> Workshop: assemble your AI product-and-engineering squad with the **GitHub Copilot CLI**, then ship a full-stack app in a guided lab.
 
-> **Targets Squad CLI `0.9.4`.** Newer Squad CLI versions should work — if `squad doctor` reports `0 failed`, you're fine even if the `passed` / `info` counts differ from what the workshop shows. The minimums for every other tool are in the [prerequisites table](#prerequisites) below.
+> **Targets Squad CLI `1.1.0+` and the current GitHub Copilot CLI.** If `squad doctor` reports `0 failed`, you're fine even if the `passed` / `info` counts differ from the examples.
 
-You've used AI assistants. You've pasted context fifty times. You've re-explained the architecture to a new chat window.
+**Squad + the GitHub Copilot CLI** gives your repo a resident team — Lead, Backend Engineer, Frontend Engineer, Tester, and Scribe — with persistent memory, specialist roles, and a routing layer that sends work to the right agent automatically.
 
-**Squad is different.** It gives your repo a resident team — Lead, Backend Engineer, Frontend Engineer, Tester — with persistent memory, specialist roles, and a routing layer that sends work to the right agent automatically. One session, real decisions, compounding context.
+This workshop is written for engineers **and PMs**. Engineers can inspect and edit code. PMs can drive product goals, acceptance criteria, tradeoffs, and behavior review while the agents write the code.
 
-This workshop is the fastest honest way to find out whether it actually changes how you work. You build a real .NET 10 + React app from scratch using the team, record architectural decisions through them, run a regression-aware second feature, and — if you want to go further — observe live telemetry with .NET Aspire and hand autonomous issue triage to Ralph.
+---
+
+## Prerequisites
+
+Before the workshop, make sure your machine has:
+
+- [ ] **Node.js 22.5.0+** — required by Squad CLI for the built-in `node:sqlite` module. Download: https://nodejs.org/en/download. Install: Windows `winget install OpenJS.NodeJS.22`; macOS `brew install node@22`.
+- [ ] **.NET SDK 10.0.0+** — used for the workshop backend. Install guide: https://learn.microsoft.com/dotnet/core/install/. Install: Windows `winget install Microsoft.DotNet.SDK.10`; macOS `brew install --cask dotnet-sdk`.
+- [ ] **Git** — required for cloning and source control. Download: https://git-scm.com/downloads. Install: Windows `winget install Git.Git`; macOS `brew install git`.
+- [ ] **GitHub CLI 2.89.0+** — required for repository and project access. Download: https://cli.github.com/. Install: Windows `winget install GitHub.cli`; macOS `brew install gh`.
+- [ ] **GitHub CLI auth with project scope** — run `gh auth login -s project`, then confirm with `gh auth status`.
+- [ ] **GitHub Copilot CLI** — required for the Squad agent sessions in this workshop. Install: `npm install -g @github/copilot`; then verify with `copilot --version`.
+- [ ] **Squad CLI 1.1.0+** — required for the resident squad workspace. Package metadata: https://registry.npmjs.org/@bradygaster/squad-cli/latest. Install or upgrade: `npm install -g @bradygaster/squad-cli`.
+- [ ] **PowerShell 7** — use `pwsh` for cross-platform scripts. Download: https://github.com/PowerShell/PowerShell/releases/latest. Install: Windows `winget install Microsoft.PowerShell`; macOS `brew install powershell`.
+
+Verify everything from the repo root before opening the modules:
+
+```powershell
+pwsh ./scripts/Verify-Prerequisites.ps1
+```
+
+All checks should show `PASS`. For install commands, OS-specific notes, and troubleshooting, see the full [prerequisites guide](docs/prerequisites.md).
+
+
+---
+
+## Helpful links
+
+| Need | Link |
+|---|---|
+| Full prerequisites | [docs/prerequisites.md](docs/prerequisites.md) |
+| Troubleshooting | [docs/troubleshooting.md](docs/troubleshooting.md) |
+| Cheat sheet | [docs/cheat-sheet.md](docs/cheat-sheet.md) |
+| PM track | [docs/pm-track.md](docs/pm-track.md) |
+| Facilitator guide | [docs/facilitator-guide.md](docs/facilitator-guide.md) |
+| Companion slides | [presentations/squad-workshop.html](presentations/squad-workshop.html) |
+| Module 0 — orientation | [modules/00-orientation.md](modules/00-orientation.md) |
+| Module 1 — basic | [modules/01-basic.md](modules/01-basic.md) |
+| Module 2 — intermediate | [modules/02-intermediate.md](modules/02-intermediate.md) |
+| Module 3 — advanced | [modules/03-advanced.md](modules/03-advanced.md) |
+| Module 4 — advanced comms | [modules/04-cross-squad.md](modules/04-cross-squad.md) |
 
 ---
 
 ## What you'll build
 
-A **Personal Reading List** app — a complete, tested, full-stack application:
+A **Personal Reading List** app:
 
 - .NET 10 minimal API backend
 - React + TypeScript frontend
 - SQLite storage
 - At least one architectural decision recorded by the team
+- A review pass that checks behavior against acceptance criteria
 
 The app is a vehicle. The point is to experience the team model, not to ship the next unicorn.
 
@@ -31,13 +72,15 @@ The app is a vehicle. The point is to experience the team model, not to ship the
 
 ## Modules
 
-| # | Module | What you build | Time | Extra prerequisites |
+| # | Module | What you do | Time | Extra prerequisites |
 |---|---|---|---|---|
-| 1 | [Basic](modules/01-basic.md) | A working .NET 10 + React reading list app, built by the team end-to-end with one architectural decision and a real review pass. | ~90 min | None beyond the prereqs below. |
-| 2 | [Intermediate](modules/02-intermediate.md) | A second-wave feature on the same app — filtering, validation, regression-aware tests — to see whether persistent memory actually compounds. Inspect the team's artifacts. | ~45 min | Completed module 1. |
-| 3 | [Advanced](modules/03-advanced.md) | Observe Squad with .NET Aspire, then graduate to autonomous mode with **Ralph** — `squad triage` (polling and `--execute`), plus prompt-driven `squad loop`. | ~60 min | Completed module 1 (module 2 recommended). **Docker Desktop running** for Aspire. |
+| 0 | [Orientation](modules/00-orientation.md) | Verify the GitHub Copilot CLI, GitHub auth, repo access, and the PM/engineer mental model. | 15–20 min | GitHub Copilot CLI + GitHub CLI |
+| 1 | [Basic](modules/01-basic.md) | Build a working .NET 10 + React reading-list app with one architectural decision and a review pass. | ~90–120 min | None beyond the prereqs below. |
+| 2 | [Intermediate](modules/02-intermediate.md) | Add filtering and validation, then inspect whether the repo's memory actually compounded. | ~45 min | Completed module 1. |
+| 3 | [Advanced](modules/03-advanced.md) | Optional/facilitator-led tour: Ralph work-monitor modes (`squad watch`), Teams/email bridges, and prompt-driven loops (`squad loop`). | ~45 min | Branch protection for execution. |
+| 4 | [Advanced comms](modules/04-cross-squad.md) | Optional/advanced: add GitHub's @copilot as a teammate, reuse rosters with presets, cross-squad delegation, and sub-squads for multi-machine scale. | ~30 min | Completed module 1; module 3 recommended. |
 
-> **Honest about scope:** modules 1 and 2 are the workshop. Module 3 is more of a guided tour of the riskier corners — autonomous execution, observability — and it deliberately doesn't ask you to leave Ralph running on your repo unsupervised.
+> **Recommended PM path:** Module 0 + Module 1, then the artifact-review section of Module 2. Modules 3 and 4 are optional and best run as facilitator demos. See [docs/pm-track.md](docs/pm-track.md).
 
 ---
 
@@ -45,25 +88,23 @@ The app is a vehicle. The point is to experience the team model, not to ship the
 
 ### Prerequisites
 
-> **Windows only:** This workshop uses `winget` for package installation. macOS and Linux users will need to use equivalent package managers (`brew`, `apt`, etc.) for the install commands in [docs/prerequisites.md](docs/prerequisites.md).
-
 | Tool | Minimum version | Check command |
 |---|---|---|
 | Node.js | 22.5.0 | `node --version` |
 | .NET SDK | 10.0.0 | `dotnet --version` |
 | Git | any recent | `git --version` |
 | GitHub CLI | 2.89.0 | `gh version` |
-| GitHub CLI auth | logged in | `gh auth status` |
-| GitHub Copilot CLI | 1.0.24 | `copilot --version` |
-| Squad CLI | 0.9.4 | `squad --version` |
-| PowerShell exec policy | RemoteSigned | `Get-ExecutionPolicy -Scope CurrentUser` |
-
-See [docs/prerequisites.md](docs/prerequisites.md) for full install instructions and version-specific troubleshooting.
+| GitHub CLI auth | logged in with `project` scope | `gh auth status` |
+| GitHub Copilot CLI | current | `copilot --version` |
+| Squad CLI | 1.1.0 | `squad --version` |
+| PowerShell 7 | 7.x | `pwsh --version` |
 
 ### Verify everything in one pass
 
 ```powershell
-.\scripts\Verify-Prerequisites.ps1
+./prereqs.ps1
+# or
+pwsh ./scripts/Verify-Prerequisites.ps1
 ```
 
 All lines should show `PASS`. Fix any that don't before opening Module 1.
@@ -71,52 +112,65 @@ All lines should show `PASS`. Fix any that don't before opening Module 1.
 ### Start
 
 ```powershell
-git clone https://github.com/joslat/squad-workshop.git
+git clone https://github.com/tamirdresher/squad-workshop.git
 cd squad-workshop
-.\scripts\Verify-Prerequisites.ps1
+./prereqs.ps1
 ```
 
-Then open [modules/01-basic.md](modules/01-basic.md) and follow from Step 0.
+Then open [modules/00-orientation.md](modules/00-orientation.md) and continue to [Module 1](modules/01-basic.md).
 
 ---
 
 ## Getting help
 
-**Stuck on a step?** Use the Squad Coach agent — it knows every module step, every troubleshooting pattern, and the failure modes of Squad itself.
+**Stuck on a step?** Use the Squad Coach agent — it knows every module step, workshop setup, and the failure modes of Squad itself.
 
-One-time setup (from the workshop repo root):
+One-time setup from this workshop repo root:
 
 ```powershell
-.\scripts\Install-WorkshopAgents.ps1
+./scripts/Install-WorkshopAgents.ps1
 ```
 
-This copies the coach agent and the two helper prompts into `reading-list-squad-lab\.github\` so Copilot CLI can discover them. Then from inside the lab repo:
+Then from inside the lab repo:
 
 ```powershell
 copilot --agent squad-coach
 ```
 
-Then ask anything: "I'm on Module 1 Step 4 and the team isn't generating tests" or "squad doctor is showing warnings" or "explain what decisions.md should look like."
+Ask anything: "I'm on Module 1 Step 4 and the team isn't generating tests" or "Copilot starts but GitHub access fails."
 
-**Using VS Code?** GitHub Copilot in this repo is pre-configured with Squad context — ask questions in Chat and it will give Squad-aware answers without any setup.
+Other help surfaces:
 
-**Structured help.** The two `.prompt.md` files below are GitHub Copilot Chat reusable prompts (front-matter `mode: ask`) — in VS Code with Copilot Chat, invoke them by name from the Chat prompt picker, or open the file and copy its templated content into any Copilot CLI session.
-
-- [Prompt: debug a stuck step](.github/prompts/debug-step.prompt.md) — paste your error, get a diagnosis
-- [Prompt: inspect Squad artifacts](.github/prompts/inspect-squad-artifacts.prompt.md) — honest evaluation of your `.squad/` files after Module 2
-- [docs/troubleshooting.md](docs/troubleshooting.md) — known failure patterns with exact fixes
+- [Prompt: debug a stuck step](.github/prompts/debug-step.prompt.md)
+- [Prompt: inspect Squad artifacts](.github/prompts/inspect-squad-artifacts.prompt.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [Cheat sheet](docs/cheat-sheet.md)
+- [Budget & model tiers](docs/budget-and-models.md)
+- [PM track](docs/pm-track.md)
+- [Facilitator guide](docs/facilitator-guide.md)
 
 ---
 
 ## Contributing
 
-Spotted a broken step? Tool version changed? Want to propose a new module?
+Spotted a broken step? Tool version changed? Want to propose a module?
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) or [open an issue](https://github.com/joslat/squad-workshop/issues/new/choose).
+See [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue in this repo.
+
+---
+
+## Acknowledgements
+
+This workshop is adapted from **[joslat/squad-workshop](https://github.com/joslat/squad-workshop)** by Jose Luis Latorre Millas and contributors, licensed under MIT.
+
+Additional thanks:
+
+- **[Brady Gaster](https://github.com/bradygaster)** — creator of the [Squad CLI](https://github.com/github/squad).
+- **[Tamir Dresher](https://github.com/tamirdresher)** — co-creator of Squad and author of the [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace and companion material.
 
 ---
 
 ## License
 
-This workshop is licensed under the [Apache License 2.0](LICENSE).  
-Copyright © 2026 joslat
+This workshop is licensed under the [MIT License](LICENSE).
+Copyright © 2026 Jose Luis Latorre Millas and contributors

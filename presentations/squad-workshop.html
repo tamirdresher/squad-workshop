@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Companion slides for the module-based Squad workshop.">
+  <title>Multi AI Agents in Practice with Squad</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root { color-scheme: light; --bg: #f7f4ef; --surface: #fff; --text: #242424; --muted: #5c5c5c; --accent: #b11f4b; --border: #ccc; --link: #0067b8; }
+    html[data-theme="dark"] { color-scheme: dark; --bg: #252525; --surface: #303030; --text: #eee; --muted: #bbb; --accent: #fd8ea1; --border: #666; --link: #72bcff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 20px/1.5 "Segoe UI", Aptos, sans-serif; }
+    a { color: var(--link); text-underline-offset: 4px; }
+    header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 14px 32px; border-bottom: 1px solid var(--border); font-size: 15px; }
+    header strong, .eyebrow, .takeaway { color: var(--accent); }
+    main { max-width: 1440px; margin: auto; }
+    .slide { min-height: calc(100vh - 145px); padding: 36px 64px 56px; }
+    .js .slide { display: none; }
+    .js .slide.active, .js.all .slide { display: block; }
+    .all .slide { border-bottom: 1px solid var(--border); }
+    h1 { font-size: clamp(42px, 5vw, 76px); line-height: 1.08; letter-spacing: -.03em; margin: 24px 0; }
+    h2 { font-size: clamp(30px, 3.2vw, 48px); line-height: 1.15; margin: 12px 0 28px; }
+    h3 { font-size: 23px; margin: 0 0 12px; }
+    p { margin: 0 0 16px; }
+    .eyebrow { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+    .subtitle { font-size: 27px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    .card { padding: 24px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); min-width: 0; }
+    .takeaway { font-size: 23px; font-weight: 600; margin-top: 28px; }
+    ul, ol { padding-left: 24px; }
+    li { margin-bottom: 10px; }
+    code { font-family: Consolas, monospace; overflow-wrap: anywhere; }
+    pre { border: 1px solid var(--border); border-radius: 10px; padding: 20px; font-size: 18px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    table { width: 100%; border-collapse: collapse; }
+    td, th { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
+    .notes { display: none; margin-top: 24px; padding: 20px; border: 1px dashed var(--border); color: var(--muted); font-size: 17px; }
+    .show-notes .notes { display: block; }
+    nav { position: sticky; bottom: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 12px; background: var(--surface); border-top: 1px solid var(--border); }
+    button, select { font: inherit; font-size: 15px; padding: 8px 12px; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+    button { cursor: pointer; }
+    button:disabled { opacity: .45; cursor: default; }
+    select { max-width: 290px; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+    #counter { align-self: center; min-width: 60px; text-align: center; font-size: 15px; }
+    @media (max-width: 850px) { .slide { padding: 24px; } .grid { grid-template-columns: 1fr; } header { padding: 12px 24px; } select { max-width: 200px; } }
+    @media print { header, nav, .notes { display: none !important; } .js .slide, .slide { display: block !important; min-height: auto; break-after: page; padding: 24px; } .slide:last-child { break-after: auto; } .card, pre { break-inside: avoid; } h1 { font-size: 48px; } h2 { font-size: 32px; } }
+  </style>
+</head>
+<body>
+  <header><strong>SQUAD WORKSHOP</strong><span>Companion slides · Squad CLI 1.1.0+</span></header>
+  <main>
+    <section class="slide" id="slide-1" data-title="Multi AI Agents in Practice with Squad">
+      <p class="eyebrow">One workshop · one evolving application</p>
+      <h1>Multi AI Agents in Practice with Squad</h1>
+      <p class="subtitle">Build a Personal Reading List app. Test whether a resident team remembers. Review the work before accepting it.</p>
+      <p><a href="../README.md">Workshop index</a> · <a href="../docs/prerequisites.md">Prerequisites</a> · <a href="../docs/facilitator-guide.md">Facilitator guide</a></p>
+      <p class="takeaway">The existing modules are the instructions. These slides are their companion, not a separate lab track.</p>
+      <aside class="notes">Engineers inspect implementation; PMs drive product goals, acceptance criteria, and behavior review. The app is created during Module 1 in reading-list-squad-lab, separate from the workshop checkout. There is no supplied starter codebase to copy.</aside>
+    </section>
+    <section class="slide" id="slide-2" data-title="Workshop map">
+      <p class="eyebrow">Choose the depth that fits your session</p>
+      <h2>Orientation, build, remember, operate, delegate.</h2>
+      <table><thead><tr><th>Module</th><th>Outcome</th><th>Guide time</th></tr></thead><tbody>
+        <tr><td><a href="../modules/00-orientation.md">Orientation</a></td><td>Verify tools, identity, and learner path</td><td>15–20 min</td></tr>
+        <tr><td><a href="../modules/01-basic.md">1 · Build the Reading List App</a></td><td>Working app, a decision, and a review</td><td>90–120 min</td></tr>
+        <tr><td><a href="../modules/02-intermediate.md">2 · Compounding Memory &amp; Second Feature</a></td><td>Filtering, validation, and artifact inspection</td><td>~45 min</td></tr>
+        <tr><td><a href="../modules/03-advanced.md">3 · Observability &amp; Ralph Watch/Loop</a></td><td>Optional facilitator-led operations tour</td><td>~45 min</td></tr>
+        <tr><td><a href="../modules/04-cross-squad.md">4 · @copilot, Presets &amp; Cross-Squad</a></td><td>Optional bounded delegation and reuse</td><td>~30 min</td></tr>
+      </tbody></table>
+      <aside class="notes">Do not promise every module in three hours. Recommended PM path: Orientation and Module 1, then Module 2 artifact review. Advanced modules are optional; establish review expectations before execution.</aside>
+    </section>
+    <section class="slide" id="slide-3" data-title="Orientation: tools and identity">
+      <p class="eyebrow">Orientation</p><h2>Verify the environment before asking agents to build.</h2>
+      <div class="grid"><div class="card"><h3>Public installation</h3><pre><code>npm install -g @github/copilot
+npm install -g @bradygaster/squad-cli
+gh auth login -s project
+pwsh .\scripts\Verify-Prerequisites.ps1</code></pre></div><div class="card"><h3>Required baseline</h3><ul><li>Node.js 22.5.0+, .NET SDK 10.0.0+</li><li>Git, GitHub CLI 2.89.0+, PowerShell 7</li><li>Current Copilot CLI and Squad CLI 1.1.0+</li><li>Working Copilot access and the intended GitHub account</li></ul></div></div>
+      <p class="takeaway">An installed CLI is not proof of live Copilot entitlement or repository permissions.</p>
+      <aside class="notes">Run the verifier from the workshop root. If access fails, pair with a working participant or facilitator; do not claim a live agent run succeeded. Full installation guidance is in the prerequisites document.</aside>
+    </section>
+    <section class="slide" id="slide-4" data-title="Orientation: a resident team">
+      <p class="eyebrow">Orientation</p><h2>Roles route work. Files preserve context. You own acceptance.</h2>
+      <div class="grid"><div class="card"><h3>A lean team</h3><p>Lead, Backend, Frontend, Tester, and Scribe.</p><p>The coordinator assigns responsibilities. Scribe consolidates decisions. A role name alone does not prove specialist work happened.</p></div><div class="card"><h3>Inspectable memory</h3><p><code>.squad/team.md</code>, <code>.squad/routing.md</code>, <code>.squad/decisions.md</code>, and agent histories.</p><p>Launch with <code>copilot --agent squad</code>.</p></div></div>
+      <p class="takeaway">Bounded spec → specialist work → evidence → human decision.</p>
+      <aside class="notes">More agents can mean more coordination and cost. Ask what changed, who owned it, and which check ran. See the orientation guide and PM track for plain-language explanations.</aside>
+    </section>
+    <section class="slide" id="slide-5" data-title="Module 1: build the Reading List app">
+      <p class="eyebrow">Module 1 · Build the Reading List App</p><h2>Create the app with the team, not from a parallel starter.</h2>
+      <div class="grid"><div class="card"><h3>Start a new learner repository</h3><pre><code>mkdir reading-list-squad-lab
+cd reading-list-squad-lab
+git init
+# Follow Module 1 for the initial commit and remote.
+squad init
+squad doctor
+copilot --agent squad</code></pre></div><div class="card"><h3>Product and stack</h3><p>Personal Reading List: .NET 10 minimal API, React + TypeScript frontend, SQLite storage.</p><p>Follow <a href="../modules/01-basic.md">Module 1</a> for the complete sequence, including repository visibility and access alternatives.</p></div></div>
+      <aside class="notes">These commands summarize rather than replace Module 1. Do not initialize Squad in the workshop checkout. Use a private or facilitator-created learner repository if appropriate.</aside>
+    </section>
+    <section class="slide" id="slide-6" data-title="Module 1: prompt and architectural decision">
+      <p class="eyebrow">Module 1 · Product contract first</p><h2>Give the team an outcome, then inspect its decisions.</h2>
+      <pre><code>I'm a solo developer building a small full-stack app called "Reading List."
+Use a lean team: Lead, Backend, Frontend, Tester, and Scribe.
+Stack: .NET 10 minimal API, React with TypeScript, and simple SQLite storage.
+Keep architecture boring and maintainable.
+Set up the team now.</code></pre>
+      <p>Approve the proposed team. Continue with the module's product spec, implementation, architectural decision, and review prompts.</p>
+      <p class="takeaway">A decision needs a tradeoff and rationale, not just a file bearing the word “decision.”</p>
+      <aside class="notes">Ask PMs to restate acceptance criteria before implementation. Follow the module instead of expanding the app. Keep permissions intentional; broad approval is not needed to understand the team model.</aside>
+    </section>
+    <section class="slide" id="slide-7" data-title="Module 1: acceptance checkpoint">
+      <p class="eyebrow">Module 1 · Review checkpoint</p><h2>A generated app is a claim until you run and review it.</h2>
+      <div class="grid"><div class="card"><h3>Behavior</h3><ul><li>Run the backend and frontend using the generated app's documented commands.</li><li>Exercise the requested reading-list flows.</li><li>Run its actual tests and inspect their assertions.</li></ul></div><div class="card"><h3>Team artifacts</h3><ul><li>Find the cast and routing.</li><li>Inspect the recorded architectural decision.</li><li>Compare the diff with the agreed spec.</li><li>Ask for corrections before accepting.</li></ul></div></div>
+      <p class="takeaway">Use the generated project's real commands; do not invent a successful test receipt.</p>
+      <aside class="notes">The workshop does not prescribe a prebuilt project layout. Have the team report exact commands and results. An agent review does not replace the human acceptance decision.</aside>
+    </section>
+    <section class="slide" id="slide-8" data-title="Module 2: compounding memory and second feature">
+      <p class="eyebrow">Module 2 · Compounding Memory &amp; Second Feature</p><h2>Does the second iteration reuse what the first learned?</h2>
+      <pre><code>Add these features and update everything accordingly:
+1. Filter books by unread/read status (both API and UI)
+2. Validation rule: title is required, author is required
+3. Update all existing tests and add new ones for the filter and validation
+4. Update the UI to show a filter toggle (All / Unread / Read)</code></pre>
+      <p>Use the same learner repository. Watch whether agents retrieve prior decisions, preserve existing behavior, and test regression risks.</p>
+      <p class="takeaway">Record whether context was reused or had to be supplied again.</p>
+      <aside class="notes">Follow Module 2. If restarting Copilot, relaunch inside the learner repository without reinitializing Squad. A faster response alone does not establish memory reuse; inspect the cited artifacts and resulting behavior.</aside>
+    </section>
+    <section class="slide" id="slide-9" data-title="Module 2: inspect the artifacts">
+      <p class="eyebrow">Module 2 · Artifact review</p><h2>Useful memory survives a skeptical read.</h2>
+      <div class="grid"><div class="card"><h3>Inspect</h3><pre><code>Get-Content .squad\decisions.md
+Get-Content .squad\routing.md
+Get-Content .squad\team.md
+Get-ChildItem .squad\agents -Recurse -Filter history.md
+git diff</code></pre></div><div class="card"><h3>Ask</h3><ul><li>Would I write these notes for myself?</li><li>Which prior constraint affected this change?</li><li>Do filter and validation tests prove the requested behavior?</li><li>Did the original app keep working?</li></ul></div></div>
+      <p class="takeaway">An empty decisions inbox can be normal: Scribe may have merged it into decisions.md.</p>
+      <aside class="notes">Use Module 2's PM artifact rubric. If you already committed, inspect the relevant commit diff rather than an empty working-tree diff. Review before publishing learner changes.</aside>
+    </section>
+    <section class="slide" id="slide-10" data-title="Module 3: observability">
+      <p class="eyebrow">Module 3 · Observability &amp; Ralph Watch/Loop</p><h2>See the work before you automate more of it.</h2>
+      <div class="grid"><div class="card"><h3>Observe</h3><p>Inspect team artifacts, agent output, issue routing, changed files, and executed checks.</p><p>For optional dashboard or external integrations, follow <a href="../modules/03-advanced.md">Module 3</a> and prepare the extra dependencies first.</p></div><div class="card"><h3>Separate signals</h3><p>Configured is not running. Running is not correct. A passing check is only evidence for what it actually tests.</p><p>Teams/email monitoring requires a configured bridge; it is not automatic access.</p></div></div>
+      <p class="takeaway">Do not spend the core workshop debugging optional infrastructure.</p>
+      <aside class="notes">Keep this a facilitator-led tour unless the group has the prerequisites and time. The facilitator guide explicitly permits skipping unconfigured bridges.</aside>
+    </section>
+    <section class="slide" id="slide-11" data-title="Module 3: Ralph watch and loop">
+      <p class="eyebrow">Module 3 · Bounded operations</p><h2>A recurring loop changes the risk, not the review gate.</h2>
+      <div class="grid"><div class="card"><h3>Watch: issue-oriented work</h3><p>Module 3 introduces <code>squad watch</code> for Ralph's polling workflow.</p><pre><code>squad watch --help</code></pre><p>Check installed help before using execution flags or monitoring integrations.</p></div><div class="card"><h3>Loop: prompt-driven housekeeping</h3><p><code>squad loop</code> runs scheduled prompt-driven work.</p><pre><code>squad loop --help</code></pre><p>Define one task, permissions, a stop procedure, and review ownership before starting.</p></div></div>
+      <p class="takeaway">Keep execution facilitator-led, protect branches, and review every proposed change.</p>
+      <aside class="notes">The module preserves historical watch examples and numbered issue caveats. They are not a guarantee of current installed behavior. Verify available commands and flags; if the installed release differs, explain the difference and do not run an unsupported example. Do not start an unattended recurring task from these slides.</aside>
+    </section>
+    <section class="slide" id="slide-12" data-title="Module 4: @copilot">
+      <p class="eyebrow">Module 4 · @copilot, Presets &amp; Cross-Squad</p><h2>A cloud coding teammate still needs a bounded issue.</h2>
+      <div class="grid"><div class="card"><h3>Add the teammate</h3><pre><code>squad copilot --auto-assign</code></pre><p>Follow <a href="../modules/04-cross-squad.md">Module 4</a> for setup, issue delegation, and pull-request review.</p></div><div class="card"><h3>Distinguish execution paths</h3><p>Ralph's local execution and GitHub's <code>@copilot</code> coding agent are different paths.</p><p>A cloud task requires repository access and coding-agent availability. You review the resulting pull request.</p></div></div>
+      <p class="takeaway">One owner, explicit acceptance criteria, and no implied permission to merge.</p>
+      <aside class="notes">Do not assign a real remote issue during a slide walkthrough without agreeing its scope and access. Adding a roster entry is not proof of a completed cloud run.</aside>
+    </section>
+    <section class="slide" id="slide-13" data-title="Module 4: presets and cross-squad">
+      <p class="eyebrow">Module 4 · Reuse and delegation</p><h2>Reuse the roster. Make each handoff inspectable.</h2>
+      <div class="grid"><div class="card"><h3>Presets</h3><p>Reuse a team setup rather than recasting every project from scratch.</p><p>Follow the module's <code>squad preset</code> examples and inspect what the preset installs.</p></div><div class="card"><h3>Cross-squad</h3><p>Use the module's peer registry, <code>squad discover</code>, and <code>squad delegate</code> walkthrough.</p><p>Give the receiving team an owner, bounded task, expected output, and a review gate.</p></div></div>
+      <p class="takeaway">Sub-squads are an ownership and workspace pattern, not a promised “sub-squad” command.</p>
+      <aside class="notes">Check installed help before demonstrations. Explain peer squads and worktrees using the module's existing material; do not provision additional repositories or machines just for the slides.</aside>
+    </section>
+    <section class="slide" id="slide-14" data-title="What you take away">
+      <p class="eyebrow">Debrief</p><h2>A working app is only half the outcome.</h2>
+      <div class="grid"><div class="card"><h3>Implementation and evidence</h3><p>Reading List app, second feature, behavior checks, architectural decision, and a reviewed diff.</p><p>Be precise about what ran and what remains unverified.</p></div><div class="card"><h3>Judgment</h3><p>Where did the team help? Where did it repeat itself? When would one assistant be simpler?</p><p>Choose the next optional module based on a real need, not the number of agents available.</p></div></div>
+      <p class="takeaway">Do not outsource the definition of done.</p>
+      <aside class="notes">Ask for one failed assumption caught by a test or review. Distinguish a local exercise from production readiness and agent claims from observed results.</aside>
+    </section>
+    <section class="slide" id="slide-15" data-title="References and attribution">
+      <p class="eyebrow">Continue in the same workshop</p><h2>One repository. Existing modules. Public tooling.</h2>
+      <div class="grid"><div class="card"><h3>Workshop</h3><p><a href="../README.md">Workshop index</a><br><a href="../docs/cheat-sheet.md">Cheat sheet</a><br><a href="../docs/troubleshooting.md">Troubleshooting</a><br><a href="../docs/pm-track.md">PM track</a><br><a href="../docs/budget-and-models.md">Budget and models</a></p></div><div class="card"><h3>Squad</h3><p><a href="https://github.com/github/squad">Canonical source: github/squad</a><br><a href="https://github.github.com/squad/">Official documentation</a></p><pre><code>npm install -g @bradygaster/squad-cli</code></pre></div></div>
+      <p>Adapted from <a href="https://github.com/joslat/squad-workshop">joslat/squad-workshop</a> by Jose Luis Latorre Millas and contributors. See the workshop's <a href="../LICENSE">MIT license</a>.</p>
+      <aside class="notes">The npm package name remains @bradygaster/squad-cli even though the canonical source is github/squad. Recheck installed help and tooling before teaching.</aside>
+    </section>
+  </main>
+  <nav aria-label="Presentation controls">
+    <button id="previous" type="button" aria-label="Previous slide">Previous</button>
+    <span id="counter" role="status" aria-live="polite"></span>
+    <button id="next" type="button" aria-label="Next slide">Next</button>
+    <select id="jump" aria-label="Jump to slide"></select>
+    <button id="overview" type="button" aria-pressed="false">All slides</button>
+    <button id="notes" type="button" aria-pressed="false">Notes</button>
+    <button id="theme" type="button" aria-label="Toggle light and dark theme">Theme</button>
+  </nav>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      root.classList.add("js");
+      root.dataset.theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      const slides = [...document.querySelectorAll(".slide")];
+      const jump = document.getElementById("jump");
+      const previous = document.getElementById("previous");
+      const next = document.getElementById("next");
+      let index = 0;
+      slides.forEach((slide, position) => {
+        const option = document.createElement("option");
+        option.value = String(position);
+        option.textContent = `${position + 1}. ${slide.dataset.title}`;
+        jump.append(option);
+      });
+      function show(position, updateHash = true) {
+        index = Math.max(0, Math.min(slides.length - 1, position));
+        slides.forEach((slide, current) => slide.classList.toggle("active", current === index));
+        jump.value = String(index);
+        document.getElementById("counter").textContent = `${index + 1} / ${slides.length}`;
+        previous.disabled = index === 0;
+        next.disabled = index === slides.length - 1;
+        if (updateHash) history.replaceState(null, "", `#${slides[index].id}`);
+        if (!root.classList.contains("all")) window.scrollTo(0, 0);
+      }
+      function fromHash() {
+        const found = slides.findIndex(slide => `#${slide.id}` === window.location.hash);
+        show(found < 0 ? 0 : found, false);
+      }
+      function toggle(id, className) {
+        const enabled = root.classList.toggle(className);
+        document.getElementById(id).setAttribute("aria-pressed", String(enabled));
+        if (className === "all" && !enabled) show(index);
+      }
+      previous.addEventListener("click", () => show(index - 1));
+      next.addEventListener("click", () => show(index + 1));
+      jump.addEventListener("change", () => show(Number(jump.value)));
+      document.getElementById("overview").addEventListener("click", () => toggle("overview", "all"));
+      document.getElementById("notes").addEventListener("click", () => toggle("notes", "show-notes"));
+      document.getElementById("theme").addEventListener("click", () => {
+        root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+      });
+      window.addEventListener("hashchange", fromHash);
+      window.addEventListener("keydown", event => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest("input, textarea, select, button, a")) return;
+        const actions = {
+          ArrowRight: () => show(index + 1), PageDown: () => show(index + 1),
+          ArrowLeft: () => show(index - 1), PageUp: () => show(index - 1),
+          Home: () => show(0), End: () => show(slides.length - 1),
+          n: () => toggle("notes", "show-notes"), a: () => toggle("overview", "all")
+        };
+        const action = actions[event.key];
+        if (action) { event.preventDefault(); action(); }
+      });
+      fromHash();
+    })();
+  </script>
+</body>
+</html>

@@ -1,61 +1,58 @@
 # Squad Workshop — Copilot Instructions
 
-This is the **squad-workshop** repository: a hands-on, self-contained workshop for learning **Squad CLI** — a tool that gives a Git repository a resident AI development team (Lead, Backend, Frontend, Tester, Scribe) with persistent memory, specialist roles, and automatic routing.
+This is the **Squad Workshop** repository: a hands-on, self-contained workshop for learning **Squad CLI through the GitHub Copilot CLI**.
 
-When answering questions in this repo, use this context to be accurate and immediately useful.
+When answering questions in this repo, be accurate, direct, and immediately useful.
 
 ---
 
 ## What this repository is
 
-A workshop in three self-contained modules (~3 hours total). Learners build a **Personal Reading List** app — a .NET 10 minimal API + React + TypeScript + SQLite full-stack app — entirely through Squad's team model.
+A workshop in four modules plus an orientation. Learners build a **Personal Reading List** app — a .NET 10 minimal API + React + TypeScript + SQLite full-stack app — through Squad's team model.
 
-- **Module 1 — Basic** (`modules/01-basic.md`): Build the app from scratch end-to-end. ~90 min.
-- **Module 2 — Intermediate** (`modules/02-intermediate.md`): Add a second-wave feature, inspect whether Squad's memory compounded. ~45 min.
-- **Module 3 — Advanced** (`modules/03-advanced.md`): .NET Aspire observability + Ralph autonomous mode. ~60 min.
+- **Module 0 — Orientation** (`modules/00-orientation.md`): Steps 0.1–0.5 — verify Copilot CLI and GitHub auth, understand the entrypoint, pick a path, choose the lab repo location, and optionally set up MCP servers and skills.
+- **Module 1 — Basic** (`modules/01-basic.md`): build the app from scratch end-to-end.
+- **Module 2 — Intermediate** (`modules/02-intermediate.md`): add filtering/validation and inspect whether memory compounded.
+- **Module 3 — Advanced** (`modules/03-advanced.md`): optional/facilitator-led Step 10 (`squad watch` triage-only mode, `--execute`, and monitoring flags) and Step 11 (`squad loop` prompt-driven scheduled housekeeping).
+- **Module 4 — Advanced Comms** (`modules/04-cross-squad.md`): optional Step 13 (add `@copilot` via `squad copilot --auto-assign`) and Step 14 (presets, `squad discover` / `squad delegate` cross-squad delegation, and sub-squads).
 
-The lab repo created *during* the workshop is called **`reading-list-squad-lab`** — it is separate from this repo. Steps 0a–0e in Module 1 create it.
+The companion browser slides are `presentations/squad-workshop.html`; the module documents remain the step-by-step source.
+
+The lab repo created during the workshop is **`reading-list-squad-lab`**. It is separate from this repo.
 
 ---
 
-## Key Squad concepts
+## Key Squad + Copilot concepts
 
 ### Team model
-`squad init` scaffolds a resident team in `.squad/` and `.github/`. Each team member is an AI agent with a role, a name from a thematic cast, and persistent memory. The `copilot --agent squad` CLI invokes the whole system.
+
+`squad init` scaffolds a resident team in `.squad/` and `.github/`. Each team member is an AI agent with a role and persistent memory. The canonical workshop entrypoint is:
+
+```powershell
+copilot --agent squad
+```
+
+This is the canonical, primary entrypoint for all Squad work in this workshop.
 
 ### Core commands
+
 | Command | What it does |
 |---|---|
-| `squad init` | Scaffold the team workspace in a new repo |
-| `squad doctor` | Health-check: validates `.squad/` structure, checks Node.js version, confirms everything is wired |
-| `squad aspire` | Launch the .NET Aspire dashboard (via Docker) to receive OpenTelemetry traces from live Squad sessions |
-| `squad triage` | Run Ralph in polling mode — reads GitHub Issues, labels/triages, optionally executes |
-| `squad loop` | Run Ralph on a schedule using a prompt file (`.squad/loop.md`) for recurring housekeeping |
-| `copilot --agent squad` | Start the Copilot CLI session with the Squad agent attached |
+| `copilot --agent squad` | Start an interactive Copilot CLI session with the Squad agent attached. |
+| `copilot --agent squad-coach` | Start the workshop coach after installing it into the lab repo. |
+| `squad init` | Scaffold the team workspace in a new repo. |
+| `squad doctor` | Validate `.squad/` structure and Node.js version. |
+| `squad watch` | Run Ralph in polling mode. |
+| `squad loop` | Run scheduled prompt-driven housekeeping. |
+| `squad copilot --auto-assign` | Add GitHub's `@copilot` coding agent to `.squad/team.md`. |
 
 ### Decisions flow
-Agents write draft decisions to `.squad/decisions/inbox/<agent>-<topic>.md`. The Scribe merges them into `.squad/decisions.md` and clears the inbox. The inbox being empty after a step is **expected and correct** — decisions live in `.squad/decisions.md`.
+
+Agents write draft decisions to `.squad/decisions/inbox/<agent>-<topic>.md`. The Scribe merges them into `.squad/decisions.md` and clears the inbox. An empty inbox after a step is expected.
 
 ### Ralph
-Ralph is the name for Squad's polling persona (`squad triage` / `squad loop`). He reads GitHub Issues as his queue. He does **not** read chat history, scan TODO comments, or invent work. To stop Ralph cleanly: `New-Item -Path .squad\ralph-stop -ItemType File`. Delete that file before the next run.
 
-### `squad doctor` healthy output (v0.9.4)
-```
-Summary: 9 passed, 0 failed, 0 warnings, 2 info
-```
-The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` are **expected** for global CLI installs — not warnings.
-
----
-
-## Key files in this repo
-
-| File | Purpose |
-|---|---|
-| `docs/prerequisites.md` | Authoritative tool requirements and install commands |
-| `scripts/Verify-Prerequisites.ps1` | Standalone prereq checker — run from the repo root with `.\scripts\Verify-Prerequisites.ps1` |
-| `docs/troubleshooting.md` | Common failure patterns with exact error text and fixes |
-| `modules/01-basic.md` | Workshop Module 1 — start here |
-| `CONTRIBUTING.md` | How to file broken-step issues, fix content, propose modules |
+Ralph is the polling persona for `squad watch` / `squad loop`. His queue is GitHub Issues. He does not read chat history, scan TODO comments, or invent work.
 
 ---
 
@@ -66,22 +63,21 @@ The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` ar
 | Node.js | 22.5.0 |
 | .NET SDK | 10.0.0 |
 | GitHub CLI | 2.89.0 |
-| GitHub Copilot CLI | 1.0.24 |
-| Squad CLI | 0.9.4 |
+| GitHub Copilot CLI | current |
+| Squad CLI | 1.1.0 |
+
+If a learner says `copilot` is missing, tell them to install the GitHub Copilot CLI (`npm install -g @github/copilot`) and verify `copilot --version`.
 
 ---
 
 ## How to answer learner questions
 
-- **"How do I install X?"** → Point to `docs/prerequisites.md` and the relevant section. All install commands use `winget` (Windows).
-- **"I'm stuck on step N of module M"** → Help them diagnose by asking for the exact error output and their tool versions from `.\scripts\Verify-Prerequisites.ps1`. Check `docs/troubleshooting.md` for known patterns.
-- **"Why is the Aspire dashboard empty?"** → Three causes: Docker not running (most common — `✓ lies when Docker is down`), Squad version too old, or firewall blocking `localhost:4317`.
-- **"The inbox under `.squad/decisions/inbox/` is empty"** → This is correct. The Scribe merged the decision into `.squad/decisions.md`.
-- **"squad doctor shows warnings"** → If on v0.9.1, upgrade with `npm install -g @bradygaster/squad-cli@latest`. If on v0.9.4+ and still seeing warnings (not info), paste the full output.
-- **"Should I use the coach agent?"** → Yes. Run `.\scripts\Install-WorkshopAgents.ps1` once from the workshop repo root to install the coach into the lab repo's `.github/agents/`, then `copilot --agent squad-coach` from inside `reading-list-squad-lab` gives step-by-step help and Squad expertise on demand.
-
----
+- **Install questions** → point to `docs/prerequisites.md` and `./prereqs.ps1`.
+- **Stuck on a step** → ask for exact command/output and `./scripts/Verify-Prerequisites.ps1` output.
+- **Copilot starts but GitHub fails** → check `gh auth status`, then `gh auth login -s project`.
+- **PM/product confusion** → ask Lead to restate product goal, acceptance criteria, user-facing changes, and risks in plain English.
+- **Empty decisions inbox** → expected; check `.squad/decisions.md`.
 
 ## Tone
 
-This workshop is direct and honest about Squad's failure modes. Match that tone. Don't oversell Squad, don't hide gotchas, don't generate vague encouragement. When something can go wrong, say exactly how to check and fix it.
+Direct and honest. Do not oversell Squad or Copilot. When something can go wrong, say exactly how to check and fix it.

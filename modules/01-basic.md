@@ -6,6 +6,26 @@
 
 ---
 
+## At a glance
+
+**⏱️ ~90–120 min** · build a working .NET 10 + React reading-list app with the team.
+
+*Budget extra on your first run — it can take up to ~2 hours, because agent generation plus the first cold .NET/npm build dominate the time.*
+
+| Step | What you do |
+|---|---|
+| 0 | Create the repo and initialize Squad |
+| 1 | Launch the GitHub Copilot CLI with the Squad agent |
+| 2 | Cast a lean solo-dev team |
+| 3 | Make the team explore before writing code |
+| 4 | Build the first vertical slice |
+| 5 | Force an architectural decision (recorded in `decisions.md`) |
+| 6 | Use the reviewer on purpose |
+
+> New here? Keep the [cheat sheet](../docs/cheat-sheet.md) open in a second tab.
+
+---
+
 ## Goal
 
 In one sitting, build a small but real app — a **Personal Reading List** — with:
@@ -26,7 +46,7 @@ See [docs/prerequisites.md](../docs/prerequisites.md) for full install instructi
 **Quick check — run this before continuing:**
 
 ```powershell
-.\scripts\Verify-Prerequisites.ps1
+./scripts/Verify-Prerequisites.ps1
 ```
 
 All lines should show `PASS`. Fix any that don't before proceeding.
@@ -37,9 +57,9 @@ All lines should show `PASS`. Fix any that don't before proceeding.
 | .NET SDK | 10.0.0 |
 | Git | any recent |
 | GitHub CLI | 2.89.0 |
-| GitHub Copilot CLI | 1.0.24 |
-| Squad CLI | 0.9.4 |
-| PowerShell exec policy | RemoteSigned |
+| GitHub Copilot CLI | current |
+| Squad CLI | 1.1.0 |
+| PowerShell 7 | 7.x |
 
 ---
 
@@ -82,6 +102,8 @@ gh repo create reading-list-squad-lab --public --source . --push
 >
 > If you'd rather not publish a workshop exercise, use `--private` instead of `--public`. No subsequent step depends on the repo being public.
 >
+> **No repo creation rights?** Use `--private` in your own namespace, ask the facilitator for a pre-created repo, or stay local and skip push steps until a remote is available.
+>
 > If the repo already exists on GitHub, link it manually and push:
 > ```powershell
 > git remote add origin https://github.com/<your-username>/reading-list-squad-lab.git
@@ -94,7 +116,7 @@ gh repo create reading-list-squad-lab --public --source . --push
 squad init
 ```
 
-**Expected output:** A list of created files under `.squad/`, `.github/`, and `.copilot/`, ending with `Your team is ready. Run squad to start.`
+**Expected output:** A list of created files under `.squad/` and `.github/` (including bundled skills under `.github/skills/` on current releases), ending with `Your team is ready. Run squad to start.`
 
 > **Note on Squad's "Run squad to start" line:** ignore it. The interactive `squad` shell is deprecated. Use `copilot --agent squad` as shown in Step 1 below.
 
@@ -112,48 +134,26 @@ git push
 squad doctor
 ```
 
-**Expected (v0.9.4):** `9 passed, 0 failed, 0 warnings, 2 info` — no manual fixes needed.
+**Expected:** `squad doctor` ends with **`0 failed`**. On v1.1.0+ the exact `passed` / `info` counts may differ from screenshots or older workshop runs because the CLI adds checks over time.
 
-#### Expected output (v0.9.4)
+What to look for:
 
-```
-🩺 Squad Doctor
-===============
+- `.squad/` exists and parses cleanly
+- `.github/agents/squad.agent.md` is present
+- Node.js `>= 22.5.0` is detected with `node:sqlite` available
+- The summary reports **`0 failed`**
 
-Mode: local
-
-✅  .squad/ directory exists — directory present
-✅  config.json valid — parses as JSON, schema OK
-✅  team.md found with ## Members header — file present, header found
-✅  routing.md found — file present
-✅  agents/ directory exists — directory present (2 agents)
-✅  casting/registry.json exists — file present, valid JSON
-✅  decisions.md exists — file present
-✅  .github/agents/squad.agent.md — file present (Copilot agent discovery file)
-✅  Node.js ≥22.5.0 (node:sqlite) — v22.5.0 — node:sqlite available
-ℹ️  vscode-jsonrpc exports field — not found in node_modules (expected for global installs)
-ℹ️  copilot-sdk session.js ESM patch — not found in node_modules (expected for global installs)
-
-Summary: 9 passed, 0 failed, 0 warnings, 2 info
-```
-
-The two `ℹ️` info lines are not warnings — Squad explicitly tells you they're expected when the CLI is installed globally (which it is, in this workshop). Both packages are bundled inside the Squad CLI itself, not in your project's `node_modules/`. No action needed.
-
-> The exact `v22.5.0` Node line will show your installed Node version — anything ≥22.5.0 is fine.
-
-> **If you're stuck on v0.9.1:** `squad init` won't scaffold `casting/registry.json` and `squad doctor` will report two warnings instead of info. Either upgrade (`npm install -g @bradygaster/squad-cli@latest`) or check the [CHANGELOG](https://github.com/bradygaster/squad/blob/main/CHANGELOG.md) for your version.
-
-> **If you're on a newer Squad CLI than this workshop targets** (see the version declared at the top of the [README](../README.md)) and the summary numbers differ — different `passed` count, different `info` count — that's expected. Squad CLI adds checks on minor bumps. The signal that matters is **`0 failed`**.
+> If your output differs slightly but still ends with **`0 failed`**, continue. If it reports failures, fix those before opening the Copilot CLI.
 
 > **Optional — install the workshop coach now.** From a separate terminal in the workshop repo root:
 > ```powershell
-> .\scripts\Install-WorkshopAgents.ps1
+> ./scripts/Install-WorkshopAgents.ps1
 > ```
 > Then in your lab terminal, `copilot --agent squad-coach` is available any time you get stuck.
 
 ---
 
-## Step 1: Launch Copilot CLI with the Squad agent
+## Step 1: Launch the GitHub Copilot CLI with the Squad agent
 
 From inside the `reading-list-squad-lab` directory, start the Copilot CLI:
 
@@ -161,11 +161,11 @@ From inside the `reading-list-squad-lab` directory, start the Copilot CLI:
 copilot --agent squad
 ```
 
-You should see the Copilot CLI banner with `GitHub Copilot v1.0.24`, a connected VS Code notification, and a prompt ready for input.
+You should see Copilot start a session with a prompt ready for input.
 
-> **Why Copilot CLI and not the VS Code Chat panel?**
+> **Why the Copilot CLI and not the VS Code Chat panel?**
 > The Squad README says it directly: *"The interactive shell (squad with no arguments) has been deprecated. For the best Squad experience, use the GitHub Copilot CLI instead."*
-> Copilot CLI gives you tool execution, agent routing, MCP access, and full Squad integration from the terminal.
+> The Copilot CLI gives you tool execution, agent routing, MCP access, and full Squad integration from the terminal.
 
 ### Enabling auto-approve (optional but recommended)
 
@@ -178,12 +178,14 @@ Squad makes many tool calls per session. To avoid approving each one:
 This is the equivalent of the `--yolo` flag. You can also start with:
 
 ```powershell
-copilot --agent squad --yolo
+copilot --agent squad -- --yolo
 ```
 
 ### Selecting the right model
 
-By default, Copilot CLI may start with a mid-tier model (e.g. `GPT-5.4 (medium)`). For a workshop that involves multi-agent coordination, code generation across .NET and React, architectural decisions, and code review — **use the strongest model available.**
+By default, the Copilot CLI may start with a mid-tier model (e.g. `GPT-5.4 (medium)`). For a workshop that involves multi-agent coordination, code generation across .NET and React, architectural decisions, and code review — **use the strongest model available.**
+
+> **Want different models per agent?** The `/model` choice here applies to the whole session. To run Ralph and the Scribe on a cheap model while the Lead reviews on a premium one, see [docs/budget-and-models.md](../docs/budget-and-models.md) (`squad config model --agent …`).
 
 Check the current model and available options:
 
@@ -240,12 +242,22 @@ Do you have a PRD or spec document? (file path, paste it, or skip)
 
 ```powershell
 # In a separate terminal (not the copilot session):
-dir .squad\agents\
+dir .squad/agents/
 ```
 
 You should see directories for each team member (e.g. `ralph/`, `scribe/`, and your newly cast agents).
 
+> **Tip — add yourself as a human member.** Open `.squad/team.md` and add yourself to the `## Members` table with role `👤 Human — Project Owner` and no charter path. This tells every agent that you are the decision-maker and that notifications/escalations should reach you:
+>
+> ```markdown
+> | Your Name | 👤 Human — Project Owner | — | 👤 Human |
+> ```
+>
+> Agents read `team.md` at the start of each session. With you listed, they will address uncertainty to you instead of blocking or guessing.
+
 ---
+
+> **PM sidebar:** In this module you are the product owner. The agents can write the code; your job is to state the product goal, approve acceptance criteria, ask for product-language tradeoffs, and verify behavior. If the team dives into implementation details too quickly, ask the Lead to restate the plan in user-facing terms.
 
 ## Step 3: Make the team explore first
 
@@ -274,14 +286,14 @@ So after this step, the inbox will be empty:
 
 ```powershell
 # This will be empty — that's expected:
-Get-ChildItem .squad\decisions\inbox\
+Get-ChildItem .squad/decisions/inbox/
 ```
 
 The merged decision lives in `.squad/decisions.md`:
 
 ```powershell
 # This is where decisions end up:
-Get-Content .squad\decisions.md
+Get-Content .squad/decisions.md
 ```
 
 You should see a structured decision entry with rationale and alternatives considered — not just chat fluff.
@@ -306,6 +318,7 @@ Keep it minimal but production-clean. Use the folder structure from the plan.
 
 **What to watch for:**
 - Role separation: Backend agent writes API code, Frontend agent writes React code, Tester writes tests
+- Your single prompt gets split across Backend / Frontend / Tester without you assigning tasks — that's the **routing layer** the README promised, in action
 - The Lead should coordinate and review
 - The Scribe should log what happened
 
@@ -317,6 +330,8 @@ Get-ChildItem -Recurse -Name -Include *.cs,*.tsx,*.ts,*.json | Where-Object { $_
 ```
 
 You should see backend `.cs` files, frontend `.tsx`/`.ts` files, and test files.
+
+**Behavior check for PMs:** once the app runs, add a book, mark it read/unread, refresh the page, and confirm the result matches the acceptance criteria. You do not need to read code to do this review.
 
 **Try building and running:**
 
@@ -355,7 +370,7 @@ but realistic patterns.
 **Verify:**
 
 ```powershell
-Get-Content .squad\decisions.md
+Get-Content .squad/decisions.md
 ```
 
 Look for a new entry with a clear rationale section.
@@ -376,10 +391,12 @@ invalid status values. Add tests for them.
 Scribe, capture any new skills or patterns we should preserve for future work.
 ```
 
+> **Skills** are small reusable markdown modules under `.github/skills/` on current releases (older repos may still use `.copilot/skills/`). `squad init` ships a starter set; Module 2 Step 9.5 inspects them in depth.
+
 **What to watch for:**
 - The Lead should give concrete review feedback (not just "looks good")
 - The Tester should find and write tests for edge cases you didn't think of
-- The Scribe should update skills in `.copilot/skills/` or `.squad/identity/wisdom.md`
+- The Scribe should update skills in `.github/skills/` (or `.copilot/skills/` on older repos) or `.squad/identity/wisdom.md`
 
 **Verify:**
 
@@ -388,10 +405,14 @@ Scribe, capture any new skills or patterns we should preserve for future work.
 Get-ChildItem -Recurse -Name -Include *test*,*Test*,*spec* | Where-Object { $_ -notmatch 'node_modules' }
 
 # Check for skills
-Get-ChildItem -Recurse .copilot\skills\
+if (Test-Path .github/skills) {
+    Get-ChildItem -Recurse .github/skills/
+} else {
+    Get-ChildItem -Recurse .copilot/skills/
+}
 
 # Check wisdom
-Get-Content .squad\identity\wisdom.md
+Get-Content .squad/identity/wisdom.md
 ```
 
 This is where Squad is supposed to earn its keep. The solo-dev docs position the Lead as the safety net and the Tester as the discipline you would otherwise skip when tired, hungry, or overconfident. Usually all three.
@@ -430,9 +451,9 @@ If you want to test whether the persistent memory actually compounds — i.e., w
 
 ## Learn more
 
-- [Squad official guide](https://bradygaster.github.io/squad/docs/guide) — comprehensive reference for all Squad concepts
-- [Sample prompts](https://bradygaster.github.io/squad/docs/sample-prompts) — vetted prompt patterns to copy and adapt
-- [Squad FAQ](https://bradygaster.github.io/squad/docs/guide/faq) — common questions and gotchas
+- [Squad official guide](https://github.github.com/squad/docs/guide) — comprehensive reference for all Squad concepts
+- [Sample prompts](https://github.github.com/squad/docs/sample-prompts) — vetted prompt patterns to copy and adapt
+- [Squad FAQ](https://github.github.com/squad/docs/guide/faq) — common questions and gotchas
 
 ---
 
